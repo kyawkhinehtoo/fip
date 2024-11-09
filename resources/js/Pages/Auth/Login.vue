@@ -2,9 +2,9 @@
     <jet-authentication-card>
         <template #logo>
             <span class="flex flex-col items-center align-middle uppercase text-blueGray-400">
-                <img src="/storage/images/imlogo.png" class="w-32 opacity-90 select-none" />
+                <img src="/storage/images/fip-logo.png" class="w-64 opacity-90 select-none" />
 
-                <h2 class="mt-2 font-bold antialiased flex">Demo Login</h2>
+                <h2 class="mt-2 font-bold antialiased flex">Operation & Billing Support System</h2>
             </span>
         </template>
 

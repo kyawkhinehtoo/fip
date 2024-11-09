@@ -146,9 +146,47 @@
             <label for="pop" class="block text-gray-700 text-sm font-bold mb-2">POP Site :</label>
             <multiselect deselect-label="Selected already" :options="pops" track-by="id" label="site_name"
               v-model="form.pop" :allow-empty="true" :multiple="false" :searchable="true" :prevent-autofocus="true"
-              :max-height="200" placeholder="Select POP site">
+              :max-height="200" placeholder="Select POP site" @select="POPSelect">
             </multiselect>
           </div>
+          <div class="mb-4 md:col-span-1" v-if="pop_devices.length !== 0">
+            <label for="pop" class="block text-gray-700 text-sm font-bold mb-2">OLT :</label>
+            <multiselect deselect-label="Selected already" :options="pop_devices" track-by="id" label="device_name"
+              v-model="form.pop_device_id" :allow-empty="true">
+            </multiselect>
+          </div>
+          <div class="mb-4 md:col-span-1">
+            <label for="location" class="block text-gray-700 text-sm font-bold mb-2">OLT Port No. </label>
+            <div class="grid grid-cols-3 gap-2">
+              <div class="col-span-1">
+                <label for="gpon_frame" class="block text-gray-700 text-sm font-bold mb-2">Frame :</label>
+                <input type="number"
+                  class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                  id="location" placeholder="Enter Frame No." v-model="form.gpon_frame" />
+                <div v-if="$page.props.errors.gpon_frame" class="text-red-500">{{ $page.props.errors.gpon_frame }}
+                </div>
+              </div>
+              <div class="col-span-1">
+                <label for="gpon_slot" class="block text-gray-700 text-sm font-bold mb-2">Slot :</label>
+                <input type="number"
+                  class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                  id="location" placeholder="Enter Slot No." v-model="form.gpon_slot" />
+                <div v-if="$page.props.errors.gpon_slot" class="text-red-500">{{ $page.props.errors.gpon_slot }}
+                </div>
+              </div>
+              <div class="col-span-1">
+                <label for="gpon_port" class="block text-gray-700 text-sm font-bold mb-2">Port :</label>
+                <input type="number"
+                  class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                  id="location" placeholder="Enter Port No." v-model="form.gpon_port" />
+                <div v-if="$page.props.errors.gpon_port" class="text-red-500">{{ $page.props.errors.gpon_port }}
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+
           <div class="mb-4 md:col-span-1">
             <label for="description" class="block text-gray-700 text-sm font-bold mb-2">Description :</label>
             <textarea
@@ -224,7 +262,7 @@ export default {
   setup(props) {
     let dn_id = ref(null);
     let showDN = ref(false);
-
+    let pop_devices = ref("");
     let editMode = ref(false);
 
     const search = useForm({
@@ -244,6 +282,10 @@ export default {
       location: null,
       input_dbm: null,
       pop: null,
+      pop_device_id: null,
+      gpon_frame: null,
+      gpon_slot: null,
+      gpon_port: null,
       tab: 1,
     });
     function confirmDelete(data) {
@@ -257,6 +299,10 @@ export default {
       form.location = null;
       form.input_dbm = null;
       form.pop = null;
+      form.pop_device_id = null;
+      form.gpon_frame = null;
+      form.gpon_slot = null;
+      form.gpon_port = null;
     }
     function isJsonString(str) {
 
@@ -276,19 +322,89 @@ export default {
       return parsed;
     }
     function getPOPName(blob) {
-      return isJsonString(blob) ? jsonParser(blob).site_name : null;
+      // return isJsonString(blob) ? jsonParser(blob).site_name : null;
+      let pop_data = props.pops.filter((d) => d.id == blob)[0];
+      return pop_data.site_name;
     }
-    function editDN(data) {
+    const POPSelect = async (pops) => {
+      try {
+        const d = await getOLT(pops.id);
+        if (d && !isEmptyObject(d)) {
+          pop_devices.value = d;
+          form.pop_device_id = null;
+          form.gpon_frame = null;
+          form.gpon_slot = null;
+          form.gpon_port = null;
+        } else {
+          pop_devices.value = null;
+          form.pop_device_id = null;
+          form.gpon_frame = null;
+          form.gpon_slot = null;
+          form.gpon_port = null;
+        }
+        return true;
+      } catch (err) {
+        console.error("Error in POPSelect:", err);
+        return false;
+      }
+    };
 
+
+    const getOLT = async (id) => {
+      const url = "/getOLTByPOP/" + id;
+      try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+        const data = await res.json();
+        return data;
+      } catch (err) {
+        console.error("Error fetching OLT:", err);
+        return null;
+      }
+    };
+
+    function isEmptyObject(value) {
+      // Check if it's an array
+      if (Array.isArray(value)) {
+        console.log('array');
+        // If the array is empty, return true
+        if (value.length === 0) {
+          console.log('empty array');
+          return true;
+        }
+        // Check if the array contains only empty objects
+        return value.every(item => typeof item === 'object' && Object.keys(item).length === 0);
+      }
+
+      // Check if it's an object
+      if (value && typeof value === 'object') {
+        return Object.keys(value).length === 0;
+      }
+
+      // If it's neither an object nor an array, return false
+      return false;
+    }
+    async function editDN(data) {
       form.id = data.id;
       form.name = data.name;
       form.description = data.description;
       form.location = data.location;
       form.input_dbm = data.input_dbm;
-      form.pop = isJsonString(data.pop) ? jsonParser(data.pop) : null;
+      form.pop = data.pop ? props.pops.filter((d) => d.id == data.pop)[0] : null;
+
+      if (form.pop) {
+        const popSelected = await POPSelect(form.pop);
+        if (popSelected) {
+          console.log("POP Devices Value:", pop_devices.value);
+          form.pop_device_id = data.pop_device_id ? pop_devices.value.find(d => d.id === data.pop_device_id) : null;
+        }
+      }
+
+      form.gpon_frame = data.gpon_frame;
+      form.gpon_slot = data.gpon_slot;
+      form.gpon_port = data.gpon_port;
       showDN.value = true;
       editMode.value = true;
-
     }
 
     function saveDN() {
@@ -366,7 +482,8 @@ export default {
 
     }
     return {
-      dn_id, saveDN, editDN, cancelDN, showDN, form, editMode, deleteNode, confirmDelete, searchPort, search, getPOPName
+      dn_id, saveDN, editDN, cancelDN, showDN, form, editMode, deleteNode, confirmDelete, searchPort, search, getPOPName, pop_devices, POPSelect
+
 
     };
   },

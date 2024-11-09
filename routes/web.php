@@ -70,7 +70,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('/uploadData', 'FileController@upload')->name('upload');
 	Route::post('/getMenu', 'MenuController@getMenu');
 	Route::get('/getDnId/{id}', 'PortController@getSNByDN');
-	Route::get('/getDNByPOP/{id}', 'PortController@getDNByPOP');
+	Route::get('/getDNInfo/{id}', 'PortController@getDNInfo');
+	Route::get('/getOLTByPOP/{id}', 'PortController@getOLTByPOP');
+	Route::get('/getDNByOLT/{id}', 'PortController@getDNByOLT');
 	Route::get('/dashboard', 'DashboardController@show')->name('dashboard');
 	Route::resource('/customer', CustomerController::class);
 	Route::post('/customer/search/', 'CustomerController@show');

@@ -27,7 +27,8 @@
           <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
               <tr>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No.
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  No.
                 </th>
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Template Name</th>
@@ -127,36 +128,37 @@
                             class="focus:ring-indigo-500 focus:border-indigo-500 block w-full rounded-md sm:text-sm border-gray-300"
                             v-on:input="updateText"> </textarea>
                           <div v-if="$page.props.errors.body" class="text-red-500">{{ $page.props.errors.body }}</div>
-                          <p class="font-normal text-gray-600 text-xs text-right">Total Words: {{ characterCount }} | SMS
+                          <div class="font-normal text-gray-600 text-xs text-right">Total Words: {{ characterCount }} |
+                            SMS
                             Per
                             Msg :
                             {{ smsCount }}
-                          </p>
+                          </div>
                         </div>
                       </div>
 
                       <h5 class="mb-2 text-md font-bold tracking-tight text-gray-900 dark:text-white w-1/2">General
                         Purpose
                         Announcement Template</h5>
-                      <p class="font-normal text-gray-700 dark:text-gray-400 text-sm">
-                      <div v-pre>
-                        {{customer_name}}, {{ftth_id}}, {{package_name}}, {{package_speed}}, <br />
-                        {{package_price}}, {{package_currency}}, {{package_type}}
+                      <div class="font-normal text-gray-700 dark:text-gray-400 text-sm">
+                        <div v-pre>
+                          {{customer_name}}, {{ftth_id}}, {{package_name}}, {{package_speed}}, <br />
+                          {{package_price}}, {{package_currency}}, {{package_type}}
+                        </div>
+
+
                       </div>
-
-
-                      </p>
                       <h5 class="mb-2 text-md font-bold tracking-tight text-gray-900 dark:text-white w-1/2">
                         Bill Related Template</h5>
-                      <p class="font-normal text-gray-700 dark:text-gray-400 text-sm">
+                      <div class="font-normal text-gray-700 dark:text-gray-400 text-sm">
 
-                      <div v-pre>
-                        {{ftth_id}}, {{bill_number}}, {{period_covered}}, {{month}}, {{year}},
-                        {{bill_to}},<br />
-                        {{attn}}, {{usage_days}}, {{total_payable}}, {{payment_duedate}}, {{url}}
+                        <div v-pre>
+                          {{ftth_id}}, {{bill_number}}, {{period_covered}}, {{month}}, {{year}},
+                          {{bill_to}},<br />
+                          {{attn}}, {{usage_days}}, {{total_payable}}, {{payment_duedate}}, {{url}}
+                        </div>
+
                       </div>
-
-                      </p>
 
 
                     </div>

@@ -20,16 +20,15 @@ class TownshipController extends Controller
         // $data = Township::all();
         // return Inertia::render('township', ['data' => $data]);
         $cities = City::all();
-        $townships = Township::leftjoin('cities','cities.id','=','townships.city_id')
-        ->when($request->township, function($query, $tsp){
-            $query->where('name','LIKE','%'.$tsp.'%')
-            ->orWhere('short_code','LIKE','%'.$tsp.'%');
-        })
-        ->select('townships.*','cities.name as city_name')
-        ->paginate(10);
+        $townships = Township::leftjoin('cities', 'cities.id', '=', 'townships.city_id')
+            ->when($request->township, function ($query, $tsp) {
+                $query->where('townships.name', 'LIKE', '%' . $tsp . '%')
+                    ->orWhere('townships.short_code', 'LIKE', '%' . $tsp . '%');
+            })
+            ->select('townships.*', 'cities.name as city_name')
+            ->paginate(10);
 
-        return Inertia::render('Setup/Township', ['townships' => $townships,'cities'=>$cities]);
-
+        return Inertia::render('Setup/Township', ['townships' => $townships, 'cities' => $cities]);
     }
 
     /**
@@ -40,7 +39,7 @@ class TownshipController extends Controller
      */
     public function store(Request $request)
     {
-   
+
         Validator::make($request->all(), [
             'name' => ['required'],
             'city_id' => ['required'],
@@ -51,13 +50,13 @@ class TownshipController extends Controller
         $township->city_id = $request->city_id['id'];
         $township->short_code = $request->short_code;
         $township->save();
-  
+
         return redirect()->route('township.index')->with('message', 'Township Created Successfully.');
         // return redirect()->route('posts.index') 
         // ->with('message', 'Post Created Successfully.');
     }
 
-   
+
 
     /**
      * Show the form for editing the specified resource.
@@ -84,16 +83,16 @@ class TownshipController extends Controller
             'city_id' => ['required'],
             'short_code' => ['required'],
         ])->validate();
-  
+
         if ($request->has('id')) {
-            
+
             $township = Township::find($request->input('id'));
             $township->name = $request->name;
             $township->city_id = $request->city_id['id'];
             $township->short_code = $request->short_code;
             $township->update();
             return redirect()->back()
-                    ->with('message', 'Township Updated Successfully.');
+                ->with('message', 'Township Updated Successfully.');
         }
     }
 

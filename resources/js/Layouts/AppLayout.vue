@@ -9,12 +9,10 @@
           type="button" onclick="toggleNavbar('example-collapse-sidebar')">
           <i class="fas fa-bars"></i>
         </button>
-        <a class="flex md:min-w-full md:grid md:grid-cols-1 items-center align-middle uppercase"
+        <a class="md:min-w-full flex-start inline-flex items-center align-middle uppercase text-blueGray-400"
           href="javascript:void(0)">
-          <div class=" col-span-1">
-            <img src="/storage/images/imlogo.png" class="w-full md:w-36" />
-          </div>
-
+          <img src="/storage/images/fip-logo.png" class="w-24 opacity-90 select-none" />
+          <span class="flex font-bold antialiased text-center text-md">OSS/BSS System</span>
         </a>
         <ul class="md:hidden items-center flex flex-wrap list-none">
           <li class="inline-block relative">
@@ -177,6 +175,10 @@
                 <li>
                   <jet-nav-link :href="route('billconfig.index')" :active="route().current('billconfig.*')"> <i
                       class="fas fa-sms opacity-75 mr-2 -mt-1 text-sm w-6"></i> Billing Config </jet-nav-link>
+                </li>
+                <li>
+                  <jet-nav-link :href="route('activity-log.index')" :active="route().current('activity-log.index')"> <i
+                      class="fas fa-circle-info opacity-75 mr-2 text-sm w-6"></i> Activity Log </jet-nav-link>
                 </li>
               </ul>
             </TransitionRoot>
@@ -347,7 +349,7 @@
               <ul class="flex flex-wrap list-none md:justify-end justify-center">
                 <li class="text-sm text-blueGray-500 font-semibold py-1">
                   <span class="text-lm-orange ">
-                    ISP MANAGER
+                    FIP
                   </span>
                   <span class="text-lm-gray">
                     OSS/BSS
@@ -449,7 +451,7 @@ export default {
       this.admin = false;
       this.report = false;
     }
-    else if (route().current('user.*') || route().current('role.*') || route().current('township.*') || route().current('city.*') || route().current('equiptment.*') || route().current('sla.*') || route().current('package.*') || route().current('project.*') || route().current('status.*') || route().current('template.*') || route().current('pop.*') || route().current('port.*') || route().current('snport.*') || route().current('announcement.*') || route().current('smsgateway.*') || route().current('radiusconfig.*') || route().current('billconfig.*') || route().current('subcom.*')) {
+    else if (route().current('user.*') || route().current('role.*') || route().current('township.*') || route().current('city.*') || route().current('equiptment.*') || route().current('sla.*') || route().current('package.*') || route().current('project.*') || route().current('status.*') || route().current('template.*') || route().current('pop.*') || route().current('port.*') || route().current('snport.*') || route().current('announcement.*') || route().current('smsgateway.*') || route().current('radiusconfig.*') || route().current('billconfig.*') || route().current('subcom.*') || route().current('activity-log.*')) {
       this.billing = false;
       this.user = false;
       this.admin = true;

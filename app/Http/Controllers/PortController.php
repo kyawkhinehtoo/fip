@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\SnPorts;
 use App\Models\DnPorts;
 use App\Models\Pop;
+use App\Models\PopDevice;
 use Hamcrest\Arrays\IsArray;
 use Hamcrest\Type\IsNumeric;
 use Inertia\Inertia;
@@ -28,7 +29,7 @@ class PortController extends Controller
         $overall = DB::table('dn_ports')
             ->leftjoin('sn_ports', 'sn_ports.dn_id', '=', 'dn_ports.id')
             // ->select(DB::raw('dn_ports.name,dn_ports.description, count(sn_ports.port) as ports'))
-            ->select('dn_ports.id', 'dn_ports.name', 'dn_ports.description', 'dn_ports.location', 'dn_ports.pop', 'dn_ports.input_dbm', DB::raw('count(sn_ports.id) as ports'))
+            ->select('dn_ports.id', 'dn_ports.name', 'dn_ports.description', 'dn_ports.location', 'dn_ports.pop', 'dn_ports.input_dbm', DB::raw('count(sn_ports.id) as ports'), 'dn_ports.pop_device_id', 'dn_ports.gpon_frame', 'dn_ports.gpon_slot', 'dn_ports.gpon_port')
             ->when($request->general, function ($query, $general) {
                 $query->where('dn_ports.name', 'LIKE', '%' . $general . '%');
                 $query->orwhere('dn_ports.description', 'LIKE', '%' . $general . '%');
@@ -40,7 +41,7 @@ class PortController extends Controller
                 }
                 $query->where(function ($q) use ($pop_id) {
                     foreach ($pop_id as $id) {
-                        $q->orWhereJsonContains('dn_ports.pop->id', $id);
+                        $q->orWhere('dn_ports.pop', $id);
                     }
                 });
             })
@@ -67,14 +68,25 @@ class PortController extends Controller
         return response()
             ->json($sn, 200);
     }
-    public function getDNByPOP($request)
+    public function getOLTByPOP($request)
     {
-        $dn = null;
 
+        $pop_devices = null;
         if ($request && is_numeric($request)) {
-            $dn = DnPorts::whereJsonContains('pop->id', (int)$request)
+            $pop_devices = PopDevice::where('pop_id', (int)$request)
                 ->get();
         }
+        return response()
+            ->json($pop_devices, 200);
+    }
+    public function getDNByOLT($request)
+    {
+        $dn = null;
+        if ($request && is_numeric($request)) {
+            $dn = DnPorts::where('pop_device_id', (int)$request)
+                ->get();
+        }
+
         return response()
             ->json($dn, 200);
     }
@@ -85,29 +97,44 @@ class PortController extends Controller
         if ($request && is_numeric($request)) {
 
             $sn = DB::table('sn_ports')
-                ->join('dn_ports', 'sn_ports.dn_id', '=', 'dn_ports.id')
-                ->where('dn_ports.id', '=', $request)
-                ->select('sn_ports.id as id', 'sn_ports.name as name', 'sn_ports.port as port', 'sn_ports.description as description', 'dn_ports.name as dn_name')
+                // ->join('dn_ports', 'sn_ports.dn_id', '=', 'dn_ports.id')
+                // ->join('pops', 'dn_ports.pop', '=', 'pops.id')
+                // ->join('pop_devices', 'dn_ports.pop_device_id', '=', 'pop_devices.id')
+                ->where('sn_ports.dn_id', '=', $request)
+                ->select(
+                    'sn_ports.id as id',
+                    'sn_ports.name as name',
+                    'sn_ports.port as port',
+                    'sn_ports.description as description',
+                    'sn_ports.dn_id as dn_id'
+                )
                 ->get();
         }
         return response()
             ->json($sn, 200);
     }
-    public function getDNBySN($request)
+    public function getDNInfo($request)
     {
-
-        $sn = null;
+        $dn = null;
         if ($request && is_numeric($request)) {
-
-            $sn = DB::table('sn_ports')
-                ->join('dn_ports', 'sn_ports.dn_id', '=', 'dn_ports.id')
+            $dn = DB::table('dn_ports')
                 ->where('dn_ports.id', '=', $request)
-                ->select('sn_ports.id as id', 'sn_ports.name as name', 'sn_ports.port as port', 'sn_ports.description as description', 'dn_ports.name as dn_name')
+                ->select(
+                    'dn_ports.name as dn_name',
+                    'dn_ports.pop as pop_id',
+                    'dn_ports.pop_device_id as pop_device_id',
+                    'dn_ports.gpon_frame',
+                    'dn_ports.gpon_slot',
+                    'dn_ports.gpon_port'
+                )
                 ->get();
         }
         return response()
-            ->json($sn, 200);
+            ->json($dn, 200);
     }
+
+
+
     public function store(Request $request)
     {
         Validator::make($request->all(), [
@@ -125,8 +152,11 @@ class PortController extends Controller
             $dnport = new DnPorts();
             $dnport->name = $request->name;
             $dnport->description = $request->description;
-            $dnport->pop = $request->pop;
-            $dnport->location = $request->location;
+            $dnport->pop = $request->pop ?? $request->pop_device_id['id'];
+            $dnport->pop_device_id = $request->pop_device_id ?? $request->pop_device_id['id'];
+            $dnport->gpon_frame = $request->gpon_frame;
+            $dnport->gpon_slot = $request->gpon_slot;
+            $dnport->gpon_port = $request->gpon_port;
             $dnport->location = $request->location;
             $dnport->input_dbm = $request->input_dbm;
             $dnport->save();
@@ -156,7 +186,11 @@ class PortController extends Controller
         if ($request->has('id')) {
             $dnport = DnPorts::find($request->input('id'));
             $dnport->name = $request->name;
-            $dnport->pop = $request->pop;
+            $dnport->pop = $request->pop ?? $request->pop_device_id['id'];
+            $dnport->pop_device_id = $request->pop_device_id ?? $request->pop_device_id['id'];
+            $dnport->gpon_frame = $request->gpon_frame;
+            $dnport->gpon_slot = $request->gpon_slot;
+            $dnport->gpon_port = $request->gpon_port;
             $dnport->description = $request->description;
             $dnport->location = $request->location;
             $dnport->input_dbm = $request->input_dbm;

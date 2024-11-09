@@ -43,10 +43,11 @@
                     <div class="grid grid-cols-1 sm:grid-cols-4 gap-2">
                       <div class="col-span-1 sm:col-span-1">
                         <label for="name" class="block text-sm font-medium text-gray-700"><span
-                            class="text-red-500">*</span> Customer Name </label>
+                            class="text-red-500">*</span>
+                          Customer Name </label>
                         <div class="mt-1 flex rounded-md shadow-sm">
                           <span
-                            class="z-10 leading-snug font-normal absolute text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
+                            class="z-10 leading-snug font-normal text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
                             <i class="fas fa-user"></i>
                           </span>
                           <input type="text" v-model="form.name" name="name" id="name"
@@ -72,62 +73,24 @@
                           }}
                         </p>
                       </div>
+
                       <div class="col-span-1 sm:col-span-1">
                         <label for="phone_1" class="block text-sm font-medium text-gray-700"><span
-                            class="text-red-500">*</span> Primary Phone Number </label>
+                            class="text-red-500">*</span>
+                          Phone No. (e.g. 09-123/09-456)</label>
                         <div class="mt-1 flex rounded-md shadow-sm">
                           <span
                             class="z-10 leading-snug font-normal absolute text-center text-blueGray-300 bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
                             <i class="fas fa-phone"></i>
                           </span>
-                          <input type="number" v-model="form.phone_1" name="phone_1" id="phone_1"
+                          <input type="text" v-model="form.phone_1" name="phone_1" id="phone_1"
                             class="pl-10 focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300"
-                            placeholder="e.g 0945000111" v-on:keypress="isNumber(event)" required
-                            :disabled="checkPerm('phone_1')" />
+                            placeholder="e.g 0945000111" required :disabled="checkPerm('phone_1')" />
                         </div>
                         <p v-show="$page.props.errors.phone_1" class="mt-2 text-sm text-red-500">{{
                           $page.props.errors.phone_1 }}</p>
                       </div>
                       <div class="col-span-1 sm:col-span-1">
-                        <label for="phone_2" class="block text-sm font-medium text-gray-700"> Secondary Phone Number
-                        </label>
-                        <div class="mt-1 flex rounded-md shadow-sm">
-                          <span
-                            class="z-10 leading-snug font-normal absolute text-center text-blueGray-300 bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
-                            <i class="fas fa-phone"></i>
-                          </span>
-                          <input type="number" v-model="form.phone_2" name="phone_2" id="phone_2"
-                            class="pl-10 focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300"
-                            placeholder="e.g 0945000111" v-on:keypress="isNumber(event)"
-                            :disabled="checkPerm('phone_2')" />
-                        </div>
-                        <p v-show="$page.props.errors.phone_2" class="mt-2 text-sm text-red-500">{{
-                          $page.props.errors.phone_2 }}</p>
-                      </div>
-                      <div class="col-span-1 sm:col-span-1">
-                        <label for="township" class="block text-sm font-medium text-gray-700"><span
-                            class="text-red-500">*</span> Township </label>
-                        <div class="mt-1 flex rounded-md shadow-sm" v-if="townships.length !== 0">
-                          <multiselect deselect-label="Selected already" :options="townships" track-by="id" label="name"
-                            v-model="form.township" :allow-empty="false" :disabled="checkPerm('township_id')" required>
-                          </multiselect>
-                        </div>
-                        <p v-show="$page.props.errors.township_id" class="mt-2 text-sm text-red-500">{{
-                          $page.props.errors.township_id }}</p>
-                      </div>
-                      <div class="col-span-1 sm:col-span-1">
-                        <label for="project_id" class="block text-sm font-medium text-gray-700"> Project/ Partner
-                        </label>
-                        <div class="mt-1 flex rounded-md " v-if="projects.length !== 0">
-                          <multiselect deselect-label="Selected already" :options="projects" track-by="id" label="name"
-                            v-model="form.project" :allow-empty="true" :disabled="checkPerm('project_id')">
-                          </multiselect>
-                        </div>
-                        <p v-if="$page.props.errors.project" class="mt-2 text-sm text-red-500">{{
-                          $page.props.errors.project
-                        }}</p>
-                      </div>
-                      <div class="col-span-1 sm:col-span-2">
                         <label for="email" class="block text-sm font-medium text-gray-700"> Email
                         </label>
                         <div class="mt-1 flex rounded-md ">
@@ -143,9 +106,54 @@
                           $page.props.errors.email
                         }}</p>
                       </div>
+
+                      <div class="col-span-1 sm:col-span-1">
+                        <label for="township" class="block text-sm font-medium text-gray-700"><span
+                            class="text-red-500">*</span>
+                          Township </label>
+                        <div class="mt-1 flex rounded-md shadow-sm" v-if="townships.length !== 0">
+                          <multiselect deselect-label="Selected already" :options="townships" track-by="id" label="name"
+                            v-model="form.township" placeholder="Select Township" :allow-empty="false"
+                            :disabled="checkPerm('township_id')" :onchange="goID" @select="goID" @close="goID" required>
+                          </multiselect>
+                        </div>
+                        <p v-show="$page.props.errors.township_id" class="mt-2 text-sm text-red-500">{{
+                          $page.props.errors.township_id }}</p>
+                      </div>
+                      <div class="col-span-1 sm:col-span-1">
+                        <label for="project_id" class="block text-sm font-medium text-gray-700"> Project/ Partner
+                        </label>
+                        <div class="mt-1 flex rounded-md " v-if="projects.length !== 0">
+                          <multiselect deselect-label="Selected already" :options="projects" track-by="id" label="name"
+                            v-model="form.project" placeholder="Select Project/Partner" :allow-empty="false"
+                            :disabled="checkPerm('project_id')" :onchange="goID" @select="goID" @close="goID">
+                          </multiselect>
+                        </div>
+                        <p v-if="$page.props.errors.project" class="mt-2 text-sm text-red-500">{{
+                          $page.props.errors.project
+                        }}</p>
+                      </div>
+
+                      <div class="col-span-1 sm:col-span-2">
+                        <label for="social_account" class="block text-sm font-medium text-gray-700"> Social Account
+                        </label>
+                        <div class="mt-1 flex rounded-md ">
+                          <span
+                            class="z-10 leading-snug font-normal absolute text-center text-purple-400 bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
+                            <i class="mt-1 fas fa-brands fa-viber"></i>
+                          </span>
+                          <input type="text" v-model="form.social_account" name="social_account" id="social_account"
+                            class="pl-10 focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300"
+                            placeholder="Enter Social Account" :disabled="checkPerm('social_account')" />
+                        </div>
+                        <p v-if="$page.props.errors.social_account" class="mt-2 text-sm text-red-500">{{
+                          $page.props.errors.social_account
+                        }}</p>
+                      </div>
                       <div class="col-span-1 sm:col-span-4">
                         <label for="address" class="block text-sm font-medium text-gray-700"><span
-                            class="text-red-500">*</span> Full Address </label>
+                            class="text-red-500">*</span>
+                          Full Address </label>
                         <div class="mt-1 flex rounded-md shadow-sm">
                           <span
                             class="z-10 leading-snug font-normal absolute text-center text-blueGray-300 bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
@@ -159,12 +167,11 @@
                           $page.props.errors.address }}</p>
                       </div>
                     </div>
-
                     <hr class="my-4 md:min-w-full" />
                     <h6 class="md:min-w-full text-indigo-700 text-xs uppercase font-bold block pt-1 no-underline">Sale
                       Information</h6>
                     <div class="grid grid-cols-1 sm:grid-cols-4 gap-2">
-                      <div class="col-span-1">
+                      <div class="col-span-1 sm:col-span-1">
                         <label for="order_date" class="block text-sm font-medium text-gray-700"><span
                             class="text-red-500">*</span> Order Date </label>
                         <div class="mt-1 flex rounded-md shadow-sm">
@@ -175,9 +182,10 @@
                         <p v-show="$page.props.errors.order_date" class="mt-2 text-sm text-red-500">{{
                           $page.props.errors.order_date }}</p>
                       </div>
-                      <div class="col-span-1">
+                      <div class="col-span-1 sm:col-span-1">
                         <label for="status" class="block text-sm font-medium text-gray-700"><span
-                            class="text-red-500">*</span> Customer Status </label>
+                            class="text-red-500">*</span>
+                          Customer Status </label>
                         <div class="mt-1 flex rounded-md shadow-sm" v-if="status_list.length !== 0">
                           <multiselect deselect-label="Selected already" :options="status_list" track-by="id"
                             label="name" v-model="form.status" :allow-empty="false" :disabled="checkPerm('status_id')">
@@ -187,7 +195,7 @@
                           $page.props.errors.status
                         }}</p>
                       </div>
-                      <div class="col-span-1">
+                      <div class="col-span-1 sm:col-span-1">
                         <label for="sale_person" class="block text-sm font-medium text-gray-700"><span
                             class="text-red-500">*</span> Sale Person </label>
                         <div class="mt-1 flex rounded-md shadow-sm" v-if="sale_persons.length !== 0">
@@ -199,12 +207,12 @@
                         <p v-show="$page.props.errors.sale_person" class="mt-2 text-sm text-red-500">{{
                           $page.props.errors.sale_person }}</p>
                       </div>
-                      <div class="col-span-1">
+                      <div class="col-span-1 sm:col-span-1">
                         <label for="sale_channel" class="block text-sm font-medium text-gray-700"><span
                             class="text-red-500">*</span> Sale Channel </label>
                         <div class="mt-1 flex rounded-md shadow-sm">
                           <span
-                            class="z-10 leading-snug font-normal absolute text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
+                            class="z-10 leading-snug font-normal text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
                             <i class="fas fa-external-link-alt"></i>
                           </span>
                           <input type="text" v-model="form.sale_channel" name="sale_channel" id="sale_channel"
@@ -214,9 +222,11 @@
                         <p v-show="$page.props.errors.sale_channel" class="mt-2 text-sm text-red-500">{{
                           $page.props.errors.sale_channel }}</p>
                       </div>
-                      <div class="col-span-1">
+
+                      <div class="col-span-1 sm:col-span-1">
                         <label for="package" class="block text-sm font-medium text-gray-700"><span
-                            class="text-red-500">*</span> Package </label>
+                            class="text-red-500">*</span>
+                          Package </label>
                         <div class="mt-1 flex rounded-md shadow-sm" v-if="packages">
                           <multiselect deselect-label="Selected already" :options="packages" track-by="id" label="name"
                             v-model="form.package" :allow-empty="false" :disabled="checkPerm('package_id')">
@@ -225,7 +235,7 @@
                         <p v-show="$page.props.errors.package" class="mt-2 text-sm text-red-500">{{
                           $page.props.errors.package }}</p>
                       </div>
-                      <div class="col-span-1">
+                      <div class="col-span-1 sm:col-span-1">
                         <label for="extra_bandwidth" class="block text-sm font-medium text-gray-700"> Extra Bandwidth
                         </label>
                         <div class="mt-1 flex rounded-md shadow-sm">
@@ -241,7 +251,7 @@
                         <p v-show="$page.props.errors.extra_bandwidth" class="mt-2 text-sm text-red-500">{{
                           $page.props.errors.extra_bandwidth }}</p>
                       </div>
-                      <div class="col-span-1">
+                      <div class="col-span-1 sm:col-span-1">
                         <label for="foc_period" class="block text-sm font-medium text-gray-700"><input type="checkbox"
                             class="rounded-sm" v-model="form.foc" id="foc" /> FOC (Free of Charge) </label>
                         <div class="mt-1 flex rounded-md">
@@ -265,13 +275,13 @@
                         </div>
 
                       </div>
-                      <div class="col-span-1">
+                      <div class="col-span-1 sm:col-span-1">
                         <label for="customer_type" class="block text-sm font-medium text-gray-700"> Customer Type
                         </label>
                         <div class="mt-1 flex rounded-md">
                           <select name="customer_type" id="customer_type" v-model="form.customer_type"
                             class="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            :disabled="checkPerm('customer_type')">
+                            @change="goID" :disabled="checkPerm('customer_type')">
                             <option value="1">Normal Customer</option>
                             <option value="2">VIP Customer</option>
                             <option value="3">Partner Customer</option>
@@ -298,28 +308,31 @@
                     <hr class="my-4 md:min-w-full" />
                     <h6 class="md:min-w-full text-indigo-700 text-xs uppercase font-bold block pt-1 no-underline">
                       Installation Information</h6>
-                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-2">
-                      <div class="col-span-1">
-                        <label for="ftth_id" class="block text-sm font-medium text-gray-700"><span
-                            class="text-red-500">*</span> Customer ID </label>
-                        <div class="mt-1 flex rounded-md shadow-sm">
-                          <span
-                            class="z-10 leading-snug font-normal absolute text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
-                            <i class="fas fa-id-badge"></i>
-                          </span>
-                          <input v-model="form.ftth_id" type="text" name="ftth_id" id="ftth_id"
-                            class="pl-10 focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300"
-                            required :disabled="checkPerm('ftth_id')" />
-                        </div>
-                        <p v-show="$page.props.errors.ftth_id" class="mt-2 text-sm text-red-500">{{
-                          $page.props.errors.ftth_id }}</p>
+                    <div class="col-span-1 sm:col-span-1 w-full sm:w-1/2">
+                      <label for="ftth_id" class="block text-sm font-medium text-gray-700"><span
+                          class="text-red-500">*</span>
+                        Customer ID </label>
+                      <div class="mt-1 flex rounded-md shadow-sm">
+                        <span
+                          class="z-10 leading-snug font-normal text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
+                          <i class="fas fa-id-badge"></i>
+                        </span>
+                        <input v-model="form.ftth_id" type="text" name="ftth_id" id="ftth_id"
+                          class="pl-10 focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300"
+                          required :disabled="checkPerm('ftth_id')" />
                       </div>
-                      <div class="col-span-1">
-                        <label for="prefer_install_date" class="block text-sm font-medium text-gray-700"> Prefer
+                      <p v-show="$page.props.errors.ftth_id" class="mt-2 text-sm text-red-500">{{
+                        $page.props.errors.ftth_id }}</p>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-2">
+
+                      <div class="col-span-1 sm:col-span-1">
+                        <label for="prefer_install_date" class="block text-sm font-medium text-gray-700"><span
+                            class="text-red-500">*</span> Prefer
                           Installation Date </label>
                         <div class="mt-1 flex rounded-md shadow-sm">
                           <span
-                            class="z-10 leading-snug font-normal absolute text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
+                            class="z-10 leading-snug font-normal text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
                             <i class="fas fa-tools"></i>
                           </span>
                           <input v-model="form.prefer_install_date" type="date" name="prefer_install_date"
@@ -328,7 +341,7 @@
                             :disabled="checkPerm('prefer_install_date')" />
                         </div>
                       </div>
-                      <div class="col-span-1">
+                      <div class="col-span-1 sm:col-span-1">
                         <label for="installation_date" class="block text-sm font-medium text-gray-700"> Actual Installed
                           Date </label>
                         <div class="mt-1 flex rounded-md shadow-sm">
@@ -344,7 +357,24 @@
                         <p v-show="$page.props.errors.installation_date" class="mt-2 text-sm text-red-500">{{
                           $page.props.errors.installation_date }}</p>
                       </div>
-                      <div class="col-span-1">
+                      <div class="col-span-1 sm:col-span-1">
+                        <label for="service_activation_date" class="block text-sm font-medium text-gray-700"> Service
+                          Activation
+                          Date </label>
+                        <div class="mt-1 flex rounded-md shadow-sm">
+                          <span
+                            class="z-10 leading-snug font-normal absolute text-center text-blueGray-300 bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
+                            <i class="fas fa-tools"></i>
+                          </span>
+                          <input v-model="form.service_activation_date" type="date" name="service_activation_date"
+                            id="service_activation_date"
+                            class="pl-10 focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300"
+                            :disabled="checkPerm('service_activation_date')" />
+                        </div>
+                        <p v-show="$page.props.errors.service_activation_date" class="mt-2 text-sm text-red-500">{{
+                          $page.props.errors.service_activation_date }}</p>
+                      </div>
+                      <div class="col-span-1 sm:col-span-1">
                         <label for="subcom" class="block text-sm font-medium text-gray-700"> Installation Team </label>
                         <div class="mt-1 flex rounded-md shadow-sm" v-if="subcoms.length !== 0">
                           <multiselect deselect-label="Selected already" :options="subcoms" track-by="id" label="name"
@@ -354,17 +384,27 @@
                           $page.props.errors.subcom
                         }}</p>
                       </div>
-                      <div class="col-span-1">
+                      <div class="col-span-1 sm:col-span-1">
                         <label for="pop_site" class="block text-sm font-medium text-gray-700"><span
                             class="text-red-500">*</span> Choose POP Site </label>
                         <div class="mt-1 flex rounded-md shadow-sm" v-if="pops.length !== 0">
                           <multiselect deselect-label="Selected already" :options="pops" track-by="id" label="site_name"
-                            v-model="form.pop_id" :allow-empty="true" :disabled="checkPerm('sn_id')"
+                            v-model="form.pop_id" :allow-empty="false" :disabled="checkPerm('sn_id')"
                             @select="POPSelect">
                           </multiselect>
                         </div>
                       </div>
-                      <div class="col-span-1">
+                      <div class="col-span-1 sm:col-span-1">
+                        <label for="pop_device_id" class="block text-sm font-medium text-gray-700"><span
+                            class="text-red-500">*</span> Choose OLT</label>
+                        <div class="mt-1 flex rounded-md shadow-sm">
+                          <multiselect deselect-label="Selected already" :options="pop_devices" track-by="id"
+                            label="device_name" v-model="form.pop_device_id" :allow-empty="false"
+                            :disabled="checkPerm('pop_device_id')" @select="OLTSelect">
+                          </multiselect>
+                        </div>
+                      </div>
+                      <div class="col-span-1 sm:col-span-1">
                         <label for="fiber_distance" class="block text-sm font-medium text-gray-700"> Please Choose DN
                         </label>
                         <div class="mt-1 flex rounded-md shadow-sm" v-if="res_dn">
@@ -373,7 +413,8 @@
                           </multiselect>
                         </div>
                       </div>
-                      <div class="col-span-1">
+
+                      <div class="col-span-1 sm:col-span-1">
                         <label for="fiber_distance" class="block text-sm font-medium text-gray-700"> Please Choose SN
                         </label>
                         <div class="mt-1 flex rounded-md shadow-sm" v-if="res_sn">
@@ -381,11 +422,11 @@
                             v-model="form.sn_id" :allow-empty="true" :disabled="checkPerm('sn_id')"></multiselect>
                         </div>
                       </div>
-                      <div class="col-span-1">
+                      <div class="col-span-1 sm:col-span-1">
                         <label for="splitter_no" class="block text-sm font-medium text-gray-700"> SN Port No. </label>
                         <div class="mt-1 flex rounded-md shadow-sm">
                           <span
-                            class="z-10 leading-snug font-normal absolute text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
+                            class="z-10 leading-snug font-normal text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
                             <i class="fas fa-tools"></i>
                           </span>
                           <input v-model="form.splitter_no" type="text" name="splitter_no" id="splitter_no"
@@ -395,7 +436,39 @@
                             $page.props.errors.splitter_no }}</p>
                         </div>
                       </div>
-                      <div class="col-span-1">
+
+
+                      <div class="col-span-1 sm:col-span-1">
+                        <label for="gpon_ontid" class="block text-sm font-medium text-gray-700"> GPON ONTID </label>
+                        <div class="mt-1 flex rounded-md shadow-sm">
+                          <span
+                            class="z-10 leading-snug font-normal text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
+                            <i class="fas fa-tools"></i>
+                          </span>
+                          <input v-model="form.gpon_ontid" type="text" name="gpon_ontid" id="gpon_ontid"
+                            class="pl-10 focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300"
+                            placeholder="Optional.." :disabled="checkPerm('gpon_ontid')" />
+                          <p v-show="$page.props.errors.gpon_ontid" class="mt-2 text-sm text-red-500">{{
+                            $page.props.errors.gpon_ontid }}</p>
+                        </div>
+                      </div>
+
+                      <div class="col-span-1 sm:col-span-1">
+                        <label for="gem_port" class="block text-sm font-medium text-gray-700"> GEM Port</label>
+                        <div class="mt-1 flex rounded-md shadow-sm">
+                          <span
+                            class="z-10 leading-snug font-normal text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
+                            <i class="fas fa-tools"></i>
+                          </span>
+                          <input v-model="form.gem_port" type="text" name="gem_port" id="gem_port"
+                            class="pl-10 focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300"
+                            placeholder="Optional.." :disabled="checkPerm('gem_port')" />
+                          <p v-show="$page.props.errors.gem_port" class="mt-2 text-sm text-red-500">{{
+                            $page.props.errors.gem_port }}</p>
+                        </div>
+                      </div>
+
+                      <div class="col-span-1 sm:col-span-1">
                         <label for="fiber_distance" class="block text-sm font-medium text-gray-700"> Actual Fiber
                           Distance
                         </label>
@@ -410,11 +483,23 @@
                             $page.props.errors.fiber_distance }}</p>
                         </div>
                       </div>
-                      <div class="col-span-1">
+                      <div class="col-span-1 md:col-span-1">
+                        <label for="bundle" class="block text-sm font-medium text-gray-700">
+                          Devices
+                        </label>
+                        <div class="mt-1 flex rounded-md shadow-sm" v-if="bundle_equiptments.length !== 0">
+                          <multiselect deselect-label="Selected already" :options="bundle_equiptments" track-by="id"
+                            label="name" v-model="form.bundles" :allow-empty="false" :disabled="checkPerm('bundle')"
+                            :multiple="true" :taggable="true"></multiselect>
+                        </div>
+                        <p v-show="$page.props.errors.bundles" class="mt-2 text-sm text-red-500">{{
+                          $page.props.errors.bundles }}</p>
+                      </div>
+                      <div class="col-span-1 sm:col-span-1">
                         <label for="onu_serial" class="block text-sm font-medium text-gray-700"> ONU Serial </label>
                         <div class="mt-1 flex rounded-md shadow-sm">
                           <span
-                            class="z-10 leading-snug font-normal absolute text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
+                            class="z-10 leading-snug font-normal text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
                             <i class="fas fa-tools"></i>
                           </span>
                           <input v-model="form.onu_serial" type="text" name="onu_serial" id="onu_serial"
@@ -425,7 +510,7 @@
                           $page.props.errors.onu_serial }}</p>
 
                       </div>
-                      <div class="col-span-1">
+                      <div class="col-span-1 sm:col-span-1">
                         <label for="onu_power" class="block text-sm font-medium text-gray-700"> ONU Power </label>
                         <div class="mt-1 flex rounded-md shadow-sm">
                           <input type="text" v-model="form.onu_power" name="onu_power" id="onu_power"
@@ -434,16 +519,64 @@
                           <span
                             class="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
                             dBi </span>
+                          <p v-show="$page.props.errors.onu_power" class="mt-2 text-sm text-red-500">{{
+                            $page.props.errors.onu_power }}</p>
                         </div>
-                        <p v-show="$page.props.errors.onu_power" class="mt-2 text-sm text-red-500">{{
-                          $page.props.errors.onu_power }}</p>
                       </div>
-                      <div class="col-span-1">
+                      <div class="col-span-1 sm:col-span-1">
+                        <label for="vlan" class="block text-sm font-medium text-gray-700"> VLAN </label>
+                        <div class="mt-1 flex rounded-md shadow-sm">
+                          <span
+                            class="z-10 leading-snug font-normal text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
+                            <i class="fas fa-circle-nodes"></i>
+                          </span>
+                          <input type="number" v-model="form.vlan" name="vlan" id="vlan"
+                            class="pl-10 focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300"
+                            :disabled="checkPerm('vlan')" />
+
+                          <p v-show="$page.props.errors.vlan" class="mt-2 text-sm text-red-500">{{
+                            $page.props.errors.vlan }}</p>
+                        </div>
+                      </div>
+                      <div class="col-span-1 sm:col-span-1">
+                        <label for="wlan_ssid" class="block text-sm font-medium text-gray-700"> WLAN SSID Name </label>
+                        <div class="mt-1 flex rounded-md shadow-sm">
+                          <span
+                            class="z-10 leading-snug font-normal text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
+                            <i class="fas fa-wifi"></i>
+                          </span>
+                          <input type="text" v-model="form.wlan_ssid" name="wlan_ssid" id="wlan_ssid"
+                            class="pl-10 focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300"
+                            :disabled="checkPerm('wlan_ssid')" />
+
+                          <p v-show="$page.props.errors.wlan_ssid" class="mt-2 text-sm text-red-500">{{
+                            $page.props.errors.wlan_ssid }}</p>
+                        </div>
+                      </div>
+                      <div class="col-span-1 sm:col-span-1">
+                        <label for="wlan_password" class="block text-sm font-medium text-gray-700"> WLAN SSID Password
+                        </label>
+                        <div class="mt-1 flex rounded-md shadow-sm">
+                          <span
+                            class="z-10 leading-snug font-normal text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
+                            <i class="fas fa-lock"></i>
+                          </span>
+                          <input type="text" v-model="form.wlan_password" name="wlan_password" id="wlan_password"
+                            class="pl-10 focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300"
+                            :disabled="checkPerm('wlan_password')" />
+
+                          <p v-show="$page.props.errors.wlan_password" class="mt-2 text-sm text-red-500">{{
+                            $page.props.errors.wlan_password }}</p>
+                        </div>
+                      </div>
+
+
+                      <div class="col-span-1 sm:col-span-1">
                         <label for="pppoe_account" class="block text-sm font-medium text-gray-700"> PPPoE Account <i
                             v-if="pppoe_auto" class="text-red-600 text-xs">(Auto Generated)</i> </label>
                         <div class="mt-1 flex rounded-md shadow-sm">
                           <span :class="pppoe_auto ? 'text-blueGray-700' : 'text-blueGray-300'"
-                            class="z-10 leading-snug font-normal absolute text-center absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
+                            class="z-10 leading-snug font-normal absolute text-center bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
                             <i class="fas fa-tools"></i>
                           </span>
                           <input @click="fillPppoe" v-model="form.pppoe_account" type="text" name="pppoe_account"
@@ -454,13 +587,13 @@
                         <p v-show="$page.props.errors.pppoe_account" class="mt-2 text-sm text-red-500">{{
                           $page.props.errors.pppoe_account }}</p>
                       </div>
-                      <div class="col-span-1">
+                      <div class="col-span-1 sm:col-span-1">
                         <label for="pppoe_password" class="block text-sm font-medium text-gray-700"> PPPoE Password <i
                             class="ml-2 fa fas fa-sync text-gray-400 hover:text-gray-600 cursor-pointer"
                             @click="generatePassword()"></i> </label>
                         <div class="mt-1 flex rounded-md shadow-sm">
                           <span
-                            class="z-10 leading-snug font-normal absolute text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
+                            class="z-10 leading-snug font-normal text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
                             <i class="fas fa-tools"></i>
                           </span>
                           <input v-model="form.pppoe_password" type="text" name="pppoe_password" id="pppoe_password"
@@ -470,11 +603,12 @@
                         <p v-show="$page.props.errors.pppoe_password" class="mt-2 text-sm text-red-500">{{
                           $page.props.errors.pppoe_password }}</p>
                       </div>
-                      <div class="col-span-1">
+
+                      <div class="col-span-1 sm:col-span-1">
                         <label for="latitude" class="block text-sm font-medium text-gray-700">Latitude </label>
                         <div class="mt-1 flex rounded-md shadow-sm">
                           <span
-                            class="z-10 leading-snug font-normal absolute text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-3">
+                            class="z-10 leading-snug font-normal text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-3">
                             <i class="fas fa-location-arrow"></i>
                           </span>
                           <input type="text" v-model="form.latitude" name="latitude" id="latitude"
@@ -484,11 +618,11 @@
                         <p v-show="$page.props.errors.latitude" class="mt-2 text-sm text-red-500">{{
                           $page.props.errors.latitude }}</p>
                       </div>
-                      <div class="col-span-1">
+                      <div class="col-span-1 sm:col-span-1">
                         <label for="longitude" class="block text-sm font-medium text-gray-700">Longitude </label>
                         <div class="mt-1 flex rounded-md shadow-sm">
                           <span
-                            class="z-10 leading-snug font-normal absolute text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-3">
+                            class="z-10 leading-snug font-normal  text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-3">
                             <i class="fas fa-location-arrow"></i>
                           </span>
                           <input type="text" v-model="form.longitude" name="longitude" id="longitude"
@@ -498,24 +632,13 @@
                         <p v-show="$page.props.errors.longitude" class="mt-2 text-sm text-red-500">{{
                           $page.props.errors.longitude }}</p>
                       </div>
-                      <div class="col-span-1">
-                        <label for="installation_remark" class="block text-sm font-medium text-gray-700"> Bundle
-                          Equiptments
-                        </label>
-                        <div class="mt-1 flex rounded-md shadow-sm" v-if="bundle_equiptments.length !== 0">
-                          <multiselect deselect-label="Selected already" :options="bundle_equiptments" track-by="id"
-                            label="name" v-model="form.bundles" :allow-empty="false" :disabled="checkPerm('bundle')"
-                            :multiple="true" :taggable="true"></multiselect>
-                        </div>
-                        <p v-show="$page.props.errors.bundles" class="mt-2 text-sm text-red-500">{{
-                          $page.props.errors.bundles }}</p>
-                      </div>
-                      <div class="col-span-1 sm:col-span-4">
+
+                      <div class="col-span-1 sm:col-span-2">
                         <label for="installation_remark" class="block text-sm font-medium text-gray-700"> Installation
                           Remark </label>
                         <div class="mt-1 flex rounded-md shadow-sm">
                           <span
-                            class="z-10 leading-snug font-normal absolute text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
+                            class="z-10 leading-snug font-normal text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
                             <i class="fas fa-comment"></i>
                           </span>
                           <textarea name="installation_remark" v-model="form.installation_remark"
@@ -635,6 +758,7 @@ export default {
     radius: Object,
     customer_history: Object,
     pops: Object,
+    devices: Object,
     role: Object,
     total_documents: Object,
     total_ips: Object,
@@ -644,7 +768,8 @@ export default {
     provide('role', props.role);
     let res_dn = ref("");
     let res_sn = ref("");
-
+    let pop = ref("");
+    let pop_devices = ref("");
     let pppoe_auto = ref(false);
     let lat_long = '';
 
@@ -674,6 +799,7 @@ export default {
       sale_channel: props.customer.sale_channel,
       sale_remark: props.customer.sale_remark,
       installation_date: props.customer.installation_date,
+      service_activation_date: props.customer.service_activation_date,
       ftth_id: props.customer.ftth_id,
       township: "",
       sale_person: "",
@@ -700,8 +826,18 @@ export default {
       pppoe_account: props.customer.pppoe_account,
       pppoe_password: "",
       customer_type: props.customer.customer_type,
+
+      vlan: props.customer.vlan,
+      wlan_ssid: props.customer.wlan_ssid,
+      wlan_password: "",
+      social_account: props.customer.social_account,
       bundles: "",
-      pop_id: "",
+      email: props.customer.email,
+
+      gpon_ontid: props.customer.gpon_ontid,
+      gem_port: "",
+      pop_id: (props.customer.pop_id) ? props.pops.filter((d) => d.id = props.customer.pop_id)[0] : "",
+      pop_device_id: (props.customer.pop_device_id) ? props.devices.filter((d) => d.id = props.customer.pop_device_id)[0] : "",
     });
 
     function submit() {
@@ -751,8 +887,9 @@ export default {
       });
     }
     const setDN = (dn) => {
-      getSN(dn.id).then((d) => {
+      getDNInfo(dn.id).then((d) => {
         if (d) {
+          console.log(d);
           res_dn.value = d;
         } else {
           res_dn.value = null;
@@ -760,6 +897,17 @@ export default {
       });
     }
 
+    const getDNInfo = async (id) => {
+      let url = "/getDNInfo/" + id;
+      console.log(url);
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+        return data;
+      } catch (err) {
+        console.error(err);
+      }
+    }
     const getSN = async (id) => {
       let url = "/getDnId/" + id;
       console.log(url);
@@ -771,21 +919,44 @@ export default {
         console.error(err);
       }
     }
+
     function fillPppoe() {
       if (!form.pppoe_account) {
-        if (form.ftth_id && form.sn_id && form.dn_id && form.township) {
-          let dn_no = getNumber(form.dn_id['name']);
-          let sn_no = getNumber(form.sn_id['name']);
-          let city_code = form.township['city_code'];
-          var data = getNumber(form.ftth_id);
-          let psw = dn_no.toString() + sn_no.toString() + ('00000' + (parseInt(data))).slice(-5);
-          let pppoe = city_code + psw + '@truenet';
-          form.pppoe_account = pppoe.toLowerCase();
-          form.pppoe_password = psw;
+        if (form.ftth_id && form.township) {
+          // let dn_no = getNumber(form.dn_id['name']);
+          // let sn_no = getNumber(form.sn_id['name']);
+          // let city_code = form.township['city_code'];
+          // var data = getNumber(form.ftth_id);
+          // let psw = dn_no.toString() + sn_no.toString() + ('00000' + (parseInt(data))).slice(-5);
+          // let pppoe = city_code + psw + '@FIP';
+          form.pppoe_account = form.ftth_id;
           pppoe_auto.value = true;
         }
       }
 
+    }
+    function getAbbreviation(name) {
+      // Remove any text inside parentheses
+      name = name.replace(/\(.*?\)/g, '').trim();
+
+      // Split the name by spaces to get individual words
+      const words = name.split(/\s+/);
+
+      // Initialize an abbreviation string
+      let abbreviation = '';
+
+      // Loop through the words to construct the abbreviation
+      for (let i = 0; i < words.length; i++) {
+        // Only add the first letter of each word until abbreviation reaches 3 characters
+        abbreviation += words[i][0].toUpperCase();
+        if (abbreviation.length === 3) break;
+      }
+
+      // Get the current year
+      const currentYear = new Date().getFullYear();
+
+      // If the abbreviation is less than 3 characters, pad it (optional) and add the current year
+      return abbreviation.padEnd(3, abbreviation[abbreviation.length - 1] || '') + '@' + currentYear + 'FIP';
     }
     function generatePassword() {
       // var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -799,13 +970,9 @@ export default {
         // if (form.ftth_id) {
         //   form.pppoe_password = password;
         // }
-        if (form.ftth_id && form.sn_id && form.dn_id && form.township) {
-          let dn_no = getNumber(form.dn_id['name']);
-          let sn_no = getNumber(form.sn_id['name']);
-          let city_code = form.township['city_code'];
-          var data = getNumber(form.ftth_id);
-          let psw = dn_no.toString() + sn_no.toString() + ('00000' + (parseInt(data))).slice(-5);
-          form.pppoe_password = psw;
+        if (form.ftth_id && form.name && form.pppoe_account) {
+
+          form.pppoe_password = getAbbreviation(form.name);
         }
       }
     }
@@ -816,31 +983,81 @@ export default {
       const integerValue = matches ? parseInt(matches.join('')) : 0;
       return integerValue;
     }
-    const POPSelect = (pops) => {
-      getDN(pops.id).then((d) => {
-        if (!isEmptyObject(d)) {
-          console.log(d);
-          res_dn.value = d;
+    const POPSelect = async (pops) => {
+      try {
+        const d = await getOLT(pops.id);
+        if (d && !isEmptyObject(d)) {
+          pop_devices.value = d;
           form.sn_id = null;
+          form.pop_device_id = null;
+          form.gpon_frame = null;
+          form.gpon_slot = null;
+          form.gpon_port = null;
+          form.gpon_ontid = null;
+          form.gem_port = null;
         } else {
-          console.log('aaaa...');
+          pop_devices.value = null;
+          form.sn_id = null;
+          form.dn_id = null;
+          form.pop_device_id = null;
+          form.gpon_frame = null;
+          form.gpon_slot = null;
+          form.gpon_port = null;
+          form.gpon_ontid = null;
+          form.gem_port = null;
+        }
+        return true;
+      } catch (err) {
+        console.error("Error in POPSelect:", err);
+        return false;
+      }
+    };
+    const OLTSelect = async (pops) => {
+      try {
+        const d = await getDN(pops.id);
+        if (d && !isEmptyObject(d)) {
+          res_dn.value = d;
+          form.dn_id = null;
+          form.sn_id = null;
+
+        } else {
           form.sn_id = null;
           form.dn_id = null;
           res_dn.value = null;
           res_sn.value = null;
+
+
         }
-      });
-    }
-    const getDN = async (pop_id) => {
-      let url = "/getDNByPOP/" + pop_id;
+        return true;
+      } catch (err) {
+        console.error("Error in OLTSelect:", err);
+        return false;
+      }
+    };
+    const getOLT = async (id) => {
+      const url = "/getOLTByPOP/" + id;
       try {
         const res = await fetch(url);
+        if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
         const data = await res.json();
         return data;
       } catch (err) {
-        console.error(err);
+        console.error("Error fetching OLT:", err);
+        return null;
       }
-    }
+    };
+    const getDN = async (id) => {
+      const url = "/getDNByOLT/" + id;
+      try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+        const data = await res.json();
+        return data;
+      } catch (err) {
+        console.error("Error fetching DN:", err);
+        return null;
+      }
+    };
     function isEmptyObject(value) {
       // Check if it's an array
       if (Array.isArray(value)) {
@@ -868,7 +1085,6 @@ export default {
         x.item_data = `${x.name} / ${x.port}`;
       });
       form.project = props.projects.filter((d) => d.id == props.customer.project_id)[0];
-      form.pop_id = props.pops.filter((d) => d.id == props.customer.pop_id)[0];
       form.package = props.packages.filter((d) => d.id == props.customer.package_id)[0];
       form.township = props.townships.filter((d) => d.id == props.customer.township_id)[0];
       form.sale_person = props.sale_persons.filter((d) => d.id == props.customer.sale_person_id)[0] || null;
@@ -882,28 +1098,26 @@ export default {
         form.bundles = bundle_lists;
       }
 
-
+      res_dn.value = props.dn;
       res_sn.value = props.sn;
+      pop_devices.value = props.devices;
       if (props.customer.sn_id) {
         let sn_id = props.sn.filter((d) => d.id == props.customer.sn_id)[0] || null;
         if (sn_id) {
           let dn_id = props.dn.filter((e) => e.id == sn_id.dn_id)[0] || null;
           if (dn_id) {
-            setDN(dn_id);
             form.sn_id = sn_id;
             form.dn_id = dn_id;
-            form.pop_id = (sn_id.pop) ? JSON.parse(sn_id.pop) : null;
-
-
           }
         }
       }
 
       form.pppoe_password = (!checkPerm('pppoe_password')) ? props.customer.pppoe_password : "********";
+      form.wlan_password = (!checkPerm('wlan_password')) ? props.customer.wlan_password : "********";
       form.status = props.status_list.filter((d) => d.id == props.customer.status_id)[0];
       form.subcom = props.subcoms.filter((d) => d.id == props.customer.subcom_id)[0];
     });
-    return { form, submit, isNumber, checkPerm, res_sn, DNSelect, tab, tabClick, fillPppoe, pppoe_auto, generatePassword, POPSelect, res_dn, isEmptyObject };
+    return { form, submit, isNumber, checkPerm, res_sn, DNSelect, tab, tabClick, fillPppoe, pppoe_auto, generatePassword, POPSelect, OLTSelect, res_dn, isEmptyObject, pop_devices };
   },
 };
 </script>

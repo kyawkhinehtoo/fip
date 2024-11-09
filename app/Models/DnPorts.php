@@ -33,6 +33,10 @@ class DnPorts extends Model
         'location',
         'input_dbm',
         'pop',
+        'pop_device_id',
+        'gpon_frame',
+        'gpon_slot',
+        'gpon_port',
         'created_at',
         'updated_at'
     ];

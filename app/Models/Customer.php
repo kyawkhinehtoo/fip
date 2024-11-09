@@ -66,7 +66,19 @@ class Customer extends Model
         'pppoe_account',
         'pppoe_password',
         'currency',
-        'email'
+        'email',
+        'vlan',
+        'wlan_ssid',
+        'wlan_password',
+        'service_off_date',
+        'promotion_package_plan',
+        'refer_bonus',
+        'rollback_to_original_package_plan_date',
+        'social_account',
+        'pop_device_id',
+        'gpon_ontid',
+        'gem_port',
+        'service_activation_date',
     ];
 
     /**
@@ -107,6 +119,7 @@ class Customer extends Model
         'order_date',
         'installation_date',
         'prefer_install_date',
+        'service_activation_date',
         'created_at',
         'updated_at'
     ];

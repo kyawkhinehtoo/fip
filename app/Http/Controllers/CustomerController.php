@@ -17,6 +17,7 @@ use App\Models\DnPorts;
 use App\Models\CustomerHistory;
 use App\Models\FileUpload;
 use App\Models\Pop;
+use App\Models\PopDevice;
 use App\Models\PublicIpAddress;
 use App\Models\Subcom;
 use Inertia\Inertia;
@@ -46,6 +47,7 @@ class CustomerController extends Controller
         $projects = Project::get();
         $status = Status::get();
         $dn = DnPorts::get();
+
         $bundle_equiptments = BundleEquiptment::get();
         $active = DB::table('customers')
             ->join('status', 'customers.status_id', '=', 'status.id')
@@ -328,7 +330,7 @@ class CustomerController extends Controller
                 }
                 if ($result) {
                     //   $max_id = $max_c_id [$request->city_id];
-                    $auto_ftth_id = $request->township['city_code'] . str_pad($result + 1, 5, '0', STR_PAD_LEFT) . '-' . strtoupper($pacakge_type);
+                    $auto_ftth_id = $request->township['city_code'] . str_pad($result + 1, 6, '0', STR_PAD_LEFT) . 'FX';
                 }
             }
         }
@@ -364,6 +366,10 @@ class CustomerController extends Controller
             if ($value == 'pop_id') {
                 if (!empty($request->pop_id))
                     $customer->$value = $request->pop_id['id'];
+            }
+            if ($value == 'pop_device_id') {
+                if (!empty($request->pop_device_id))
+                    $customer->$value = $request->pop_device_id['id'];
             }
             if ($value == 'bundle') {
                 if (!empty($request->bundles)) {
@@ -448,12 +454,30 @@ class CustomerController extends Controller
             $customer_history = CustomerHistory::where('customer_id', '=', $id)
                 ->where('active', '=', 1)
                 ->first();
+            $customer_dn = DB::table('dn_ports')
+                ->join('sn_ports', 'sn_ports.dn_id', '=', 'dn_ports.id')
+                ->join('customers', 'customers.sn_id', 'sn_ports.id')
+                ->where('customers.id', $id)
+                ->select('dn_ports.*')
+                ->first();
             $sn = DB::table('sn_ports')
                 ->join('dn_ports', 'sn_ports.dn_id', '=', 'dn_ports.id')
+                ->where('sn_ports.dn_id', $customer_dn->id)
                 ->select('sn_ports.*', 'dn_ports.name as dn_name', 'dn_ports.pop as pop')
                 ->get();
-            $dn = DB::table('dn_ports')
+            $devices = DB::table('pop_devices')
+                ->join('dn_ports', 'dn_ports.pop_device_id', '=', 'pop_devices.id')
+                ->join('sn_ports', 'sn_ports.dn_id', '=', 'dn_ports.id')
+                ->join('customers', 'customers.sn_id', 'sn_ports.id')
+                ->select('pop_devices.*')
+                ->where('customers.id', $id)
                 ->get();
+            $dn = DB::table('dn_ports')
+                ->select('dn_ports.*')
+                ->where('pop', $customer->pop_id)
+                ->get();
+            $pops = Pop::all();
+
             $packages = Package::get();
             $projects = Project::get();
             $sale_persons = DB::table('users')
@@ -484,7 +508,7 @@ class CustomerController extends Controller
             $users = User::find(Auth::user()->id);
             $user = User::join('roles', 'roles.id', '=', 'users.role')->select('users.*', 'roles.name as role_name')->where('users.id', '=', Auth::user()->id)->first();
             $role = Role::join('users', 'roles.id', '=', 'users.role')->select('roles.*')->where('users.id', '=', Auth::user()->id)->first();
-            $pops = Pop::all();
+
             $radius = RadiusController::checkRadiusEnable();
             $bundle_equiptments = BundleEquiptment::get();
             $total_ips = PublicIpAddress::where('customer_id', $customer->id)->count();
@@ -509,6 +533,7 @@ class CustomerController extends Controller
                     'customer_history' => $customer_history,
                     'radius' => $radius,
                     'pops' => $pops,
+                    'devices' => $devices,
                     'total_ips' => $total_ips,
                     'total_documents' => $total_documents,
                     'bundle_equiptments' => $bundle_equiptments,
@@ -640,6 +665,10 @@ class CustomerController extends Controller
                     if (isset($request->pop_id['id']))
                         $customer->$value = $request->pop_id['id'];
                 }
+                if ($value == 'pop_device_id') {
+                    if (isset($request->pop_device_id['id']))
+                        $customer->$value = $request->pop_device_id['id'];
+                }
                 if ($value == 'bundle') {
                     if (!empty($request->bundles)) {
 
@@ -707,7 +736,7 @@ class CustomerController extends Controller
             $cid = array();
             foreach ($customers as $customer) {
                 ///(^TCL[0-9]{5}-[A-Z]{3,})$/
-                $reg = "/(^" . $city->short_code . "[0-9]{5}-[A-Z 0-9]{3,})$/";
+                $reg = "/(^" . $city->short_code . "[0-9]{6}[A-Z 0-9]{2,})$/";
                 if (preg_match($reg, $customer->ftth_id)) {
                     $pattern = '/\d+/'; // Regular expression to match integers
                     preg_match($pattern, $customer->ftth_id, $matches);

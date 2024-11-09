@@ -1,0 +1,17 @@
+VLAN
+ONU WLAN SSID
+ONU WLAN Password
+Service Off Date
+Promotion Package Plan
+Refer Bonus
+Rollback to Original Package Plan Date
+Gmail or Social Accunt
+
+    vlan
+    wlan_ssid
+    wlan_password
+service_off_date
+promotion_package_plan
+refer_bonus
+rollback_to_original_package_plan_date
+    social_account
