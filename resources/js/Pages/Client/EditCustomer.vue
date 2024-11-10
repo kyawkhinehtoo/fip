@@ -1081,9 +1081,12 @@ export default {
     }
 
     onMounted(() => {
-      props.sn.map(function (x) {
-        x.item_data = `${x.name} / ${x.port}`;
-      });
+      if (props.sn) {
+        props.sn.map(function (x) {
+          x.item_data = `${x.name} / ${x.port}`;
+        });
+      }
+
       form.project = props.projects.filter((d) => d.id == props.customer.project_id)[0];
       form.package = props.packages.filter((d) => d.id == props.customer.package_id)[0];
       form.township = props.townships.filter((d) => d.id == props.customer.township_id)[0];

@@ -460,22 +460,31 @@ class CustomerController extends Controller
                 ->where('customers.id', $id)
                 ->select('dn_ports.*')
                 ->first();
-            $sn = DB::table('sn_ports')
-                ->join('dn_ports', 'sn_ports.dn_id', '=', 'dn_ports.id')
-                ->where('sn_ports.dn_id', $customer_dn->id)
-                ->select('sn_ports.*', 'dn_ports.name as dn_name', 'dn_ports.pop as pop')
-                ->get();
+            $sn = null;
+            if ($customer_dn) {
+                $sn = DB::table('sn_ports')
+                    ->join('dn_ports', 'sn_ports.dn_id', '=', 'dn_ports.id')
+                    ->where('sn_ports.dn_id', $customer_dn->id)
+                    ->select('sn_ports.*', 'dn_ports.name as dn_name', 'dn_ports.pop as pop')
+                    ->get();
+            }
+
             $devices = DB::table('pop_devices')
                 ->join('dn_ports', 'dn_ports.pop_device_id', '=', 'pop_devices.id')
                 ->join('sn_ports', 'sn_ports.dn_id', '=', 'dn_ports.id')
                 ->join('customers', 'customers.sn_id', 'sn_ports.id')
                 ->select('pop_devices.*')
-                ->where('customers.id', $id)
+                ->groupBy('pop_devices.id')
+                //         ->where('customers.id', $id)
                 ->get();
-            $dn = DB::table('dn_ports')
-                ->select('dn_ports.*')
-                ->where('pop', $customer->pop_id)
-                ->get();
+            $dn = null;
+            if (isset($customer->pop_id)) {
+                $dn = DB::table('dn_ports')
+                    ->select('dn_ports.*')
+                    ->where('pop', $customer->pop_id)
+                    ->get();
+            }
+
             $pops = Pop::all();
 
             $packages = Package::get();
