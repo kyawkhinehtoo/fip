@@ -29,7 +29,7 @@ trait PdfTrait
             $builder = new \AshAllenDesign\ShortURL\Classes\Builder();
             $app_url = getenv('APP_URL', 'http://localhost:8000');
             if (!$app_url)
-                $app_url = "https://bss.longmaonetwork.com";
+                $app_url = "https://oss.yamsuccessofmyanmar.com";
             $shortURLObject = $builder->destinationUrl($app_url . '/storage/' . $data->ftth_id . '/' . $name)->make();
             $shortURL = $shortURLObject->url_key;
             return ['shortURL' => $shortURL, 'disk_path' => $disk_path, 'status' => 'success'];

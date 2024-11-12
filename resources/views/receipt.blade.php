@@ -264,8 +264,8 @@
                     <td style="width:10%">No.</td>
                     <td colspan="2" style="width:40%">Description</td>
                     <td style="width:10%">Qty</td>
-                    <td style="width:20%">Price (THB)</td>
-                    <td style="width:20%">Total Amount (THB)</td>
+                    <td style="width:20%">Price (MMK)</td>
+                    <td style="width:20%">Total Amount (MMK)</td>
                 </tr>
 
                 <tr>

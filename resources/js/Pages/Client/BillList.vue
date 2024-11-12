@@ -76,11 +76,11 @@
           <div class="flex pt-1 w-full">
             <div class="relative w-full">
               <label class="text-xs">{{ paid_percent }}% Percentage of {{ (paid) ? new Intl.NumberFormat('en-US', {
-        maximumSignificantDigits: 8
-      }).format(paid) : 0
+                maximumSignificantDigits: 8
+              }).format(paid) : 0
                 }} BAHT in {{ new Intl.NumberFormat('en-US', {
-        maximumSignificantDigits: 8
-      }).format(receivable)
+                  maximumSignificantDigits: 8
+                }).format(receivable)
                 }} BAHT</label>
               <div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-lightBlue-200 z-10">
                 <div :style="`width: ${paid_percent}%`"
@@ -135,12 +135,12 @@
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-              <tr v-for="(row, index) in  billings.data " v-bind:key="row.id">
+              <tr v-for="(row, index) in billings.data " v-bind:key="row.id">
                 <td class="pl-4 px-2 py-3 text-xs whitespace-nowrap">{{ (index += billings.from) }}</td>
                 <td class="px-2 py-3 text-xs whitespace-nowrap">{{ row.bill_number }}</td>
                 <td class="px-2 py-3 text-xs whitespace-nowrap">{{ row.ftth_id }}</td>
                 <td class="px-2 py-3 text-xs whitespace-nowrap">{{ (row.service_description !== row.qty) ?
-        row.service_description + `(${row.qty})` : row.service_description }}</td>
+                  row.service_description + `(${row.qty})` : row.service_description }}</td>
                 <td class="px-2 py-3 text-xs whitespace-nowrap">{{ row.usage_days }}</td>
                 <td class="px-2 py-3 text-xs whitespace-nowrap">{{ row.total_payable }}</td>
                 <td class="px-2 py-3 text-xs whitespace-nowrap">
@@ -177,8 +177,8 @@
                     Receipt</button>
                 </td>
                 <td class="px-2 py-3 text-xs whitespace-nowrap capitalize">{{
-        (row.receipt_status) ? row.receipt_status.replace('_', ' ') : ''
-      }}</td>
+                  (row.receipt_status) ? row.receipt_status.replace('_', ' ') : ''
+                }}</td>
                 <td class="px-2 py-3 text-xs whitespace-nowrap">
                   <span v-if="row.receipt_status">
                     <span v-if="row.receipt_file"><a :href="'/s/' + row.receipt_url">Download</a></span><span
@@ -234,11 +234,11 @@
           <form @submit.prevent="submit">
             <div class="shadow overflow-hidden border-b border-gray-200 p-4">
               <p v-show="$page.props.errors.receipt_date" class="mt-2 text-sm text-red-500 block">{{
-        $page.props.errors.receipt_date
-      }}</p>
+                $page.props.errors.receipt_date
+              }}</p>
               <p v-show="$page.props.errors.collected_amount" class="mt-2 text-sm text-red-500 block">{{
-        $page.props.errors.collected_amount
-      }}</p>
+                $page.props.errors.collected_amount
+              }}</p>
               <div class="grid grid-cols-1 md:grid-cols-4 w-full">
 
                 <div class="col-span-2 sm:col-span-2 border-2 border-marga bg-marga">
@@ -278,13 +278,13 @@
               </div>
               <div class="grid grid-cols-1 md:grid-cols-4 gap-6 w-full">
                 <div class="py-4 col-span-1 sm:col-span-1 border-2 border-marga text-center flex flex-col">
-                  <span class="font-semibold text-md">Amount (THB):</span> <span class="text-sm"> {{ form.total_payable
+                  <span class="font-semibold text-md">Amount (MMK):</span> <span class="text-sm"> {{ form.total_payable
                     }}</span>
                 </div>
                 <div class="py-4 col-span-3 sm:col-span-3 border-2 border-marga text-center flex flex-col">
                   <span class="font-semibold text-md">Amount In Word:</span> <span class="text-sm"> {{
-        form.amount_in_word
-      }}</span>
+                    form.amount_in_word
+                  }}</span>
                 </div>
               </div>
 
@@ -424,8 +424,8 @@
                   class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   id="customer_status" v-model="form_2.customer_status" />
                 <div v-if="$page.props.errors.customer_status" class="text-red-500">{{
-        $page.props.errors.customer_status
-      }}</div>
+                  $page.props.errors.customer_status
+                }}</div>
               </div>
               <div class="mb-4 md:col-span-1">
                 <label for="period_covered" class="block text-gray-700 text-sm font-bold mb-2">Period Covered :</label>
@@ -464,8 +464,8 @@
                   class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   id="payment_duedate" placeholder="Enter Payment Due Date" v-model="form_2.payment_duedate" />
                 <div v-if="$page.props.errors.payment_duedate" class="text-red-500">{{
-        $page.props.errors.payment_duedate
-      }}</div>
+                  $page.props.errors.payment_duedate
+                }}</div>
 
                 <!-- <label for="end_date" class="mt-4 block text-gray-700 text-sm font-bold mb-2">Last End Date
                   :</label>
@@ -590,8 +590,8 @@
                   id="previous_balance" placeholder="Enter Previous Balance" v-model="form_2.previous_balance"
                   @change="form2_calc" />
                 <div v-if="$page.props.errors.previous_balance" class="text-red-500">{{
-        $page.props.errors.previous_balance
-      }}</div>
+                  $page.props.errors.previous_balance
+                }}</div>
 
                 <label for="current_charge" class="mt-4 block text-gray-700 text-sm font-bold mb-2">Current Charge
                   :</label>
@@ -772,7 +772,7 @@ export default {
       amount_in_word: null,
       user: null,
       type: "cash",
-      currency: "baht",
+      currency: "mmk",
       collected_amount: 0,
       extra_amount: 0,
       remark: null,
@@ -799,7 +799,7 @@ export default {
       form.amount_in_word = null;
       form.user = null;
       form.type = "cash";
-      form.currency = "baht";
+      form.currency = "mmk";
       form.collected_amount = 0;
       form.extra_amount = 0;
       form.remark = null;
@@ -890,7 +890,7 @@ export default {
       form_2.reset_receipt = data.reset_receipt;
       form_2.receipt_id = data.receipt_id;
 
-      form_2.package = props.packages.filter((d) => (d.name == data.service_description && d.pop_id == data.pop_id))[0];
+      form_2.package = props.packages.filter((d) => (d.name == data.service_description))[0];
       form_2.end_date = end_date;
       var result = form_2.usage_days.indexOf(' and ');
       form_2.public_ip = (data.public_ip) ? data.public_ip : 0;
@@ -1270,7 +1270,7 @@ export default {
       form.collected_amount = data.collected_amount;
       form.type = (data.payment_channel) ? data.payment_channel : 'cash';
       form.remark = data.remark;
-      form.currency = (data.currency) ? data.currency : 'baht';
+      form.currency = (data.currency) ? data.currency : 'mmk';
       form.receipt_status = data.receipt_status;
       if (data.receipt_number)
         receipt_number.value = 'R' + data.bill_number.substring(0, 4) + '-' + data.ftth_id + '-' + ('00000' + data.receipt_number).slice(-5);
@@ -1390,7 +1390,7 @@ export default {
       console.log("Hey I am mount3ed");
       //  console.log(props.packages);
       props.packages.map(function (x) {
-        return (x.item_data = `${x.price} Baht - ${x.name} ${x.site_name}`);
+        return (x.item_data = `${x.price} MMK - ${x.name}`);
       });
       props.package_speed.map(function (x) {
         return (x.item_data = `${x.speed} Mbps - ${x.type.toUpperCase()}`);

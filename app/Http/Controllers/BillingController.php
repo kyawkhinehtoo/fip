@@ -43,8 +43,7 @@ class BillingController extends Controller
     public function BillGenerator()
     {
 
-        $packages = Package::join('pops', 'pops.id', '=', 'packages.pop_id')
-            ->select('packages.*', 'pops.site_name')
+        $packages = Package::select('packages.*')
             ->orderBy('name', 'ASC')->get();
         $townships = Township::get();
         $bill = Bills::get();
@@ -102,7 +101,6 @@ class BillingController extends Controller
                 'packages.type as type',
                 'packages.speed as speed',
                 'packages.price as price',
-                'packages.pop_id as pop_id',
                 'packages.currency as currency',
                 'status.name as status'
             )
@@ -170,26 +168,7 @@ class BillingController extends Controller
                     // Extract the second date from $period_covered
 
                 }
-                // if($value->advance_payment){
 
-                //     if($value->status_id == 2){
-                //         $billing_cost['total_cost'] =  $value->price * $value->prepaid_period;
-                //         $total_cost = ceil($billing_cost['total_cost']);
-                //         $billing_day = $value->prepaid_period.' Months';
-                //     }  
-                // }
-                // if ($request->is_mmk) {
-                //     if ($value->currency == "usd") {
-                //         $total_cost =  (int)$total_cost * (int)$request->usd_exchange_rate;
-                //     }
-                //     if ($value->currency == "baht") {
-                //         $total_cost =  (int)$total_cost * (int)$request->baht_exchange_rate;
-                //     }
-                // } else {
-                //     if ($value->currency == "usd") {
-                //         $total_cost =  (int)$total_cost * (int)$request->usd_exchange_rate;
-                //     }
-                // }
 
                 if ($value->currency == "usd") {
                     $total_cost =  (int)$total_cost * (int)$request->usd_exchange_rate;
@@ -212,7 +191,7 @@ class BillingController extends Controller
                     $billing->sub_total = $total_cost;
                     $billing->payment_duedate = $request->due_date;
                     $billing->service_description = $value->package;
-                    $billing->popsite_id = $value->pop_id;
+
                     $billing->qty = $value->speed . " Mbps";
                     $billing->usage_days = $billing_day;
                     $billing->customer_status = $value->status;
@@ -488,7 +467,7 @@ class BillingController extends Controller
             $invoice->payment_duedate = $request->payment_duedate;
 
             $invoice->service_description = $request->service_description;
-            $invoice->popsite_id = $request->package['pop_id'];
+            //  $invoice->popsite_id = $request->package['pop_id'];
 
             $invoice->qty = $request->qty;
             $invoice->usage_days = $request->usage_days;
@@ -701,7 +680,7 @@ class BillingController extends Controller
         $invoice->customer_status = $customer_status->status_name;
         $invoice->bill_month = $bill->bill_month;
         $invoice->bill_year = $bill->bill_year;
-        $invoice->popsite_id = $request->package['pop_id'];
+        //    $invoice->popsite_id = $request->package['pop_id'];
         $invoice->amount_in_word = 'Amount in words: ' . ucwords($inWords->format($request->total_payable));
         $invoice->commercial_tax = "The Prices are inclusive of Commerial Tax (5%)";
         $invoice->save();
@@ -862,8 +841,7 @@ class BillingController extends Controller
             ->first();
         if ($request->bill_id) {
             $lists = Bills::all();
-            $packages =  Package::join('pops', 'pops.id', '=', 'packages.pop_id')
-                ->select('packages.*', 'pops.site_name')
+            $packages =  Package::select('packages.*')
                 ->orderBy('price', 'ASC')->get();
             $package_speed =  Package::select('id', 'speed', 'type', 'price')
                 ->groupBy('speed', 'type')

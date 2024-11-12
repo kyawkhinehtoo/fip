@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -273,8 +272,8 @@
                         <td>No.</td>
                         <td>Description</td>
                         <td>Qty</td>
-                        <td>Price (THB)</td>
-                        <td>Total Amount (THB)</td>
+                        <td>Price (MMK)</td>
+                        <td>Total Amount (MMK)</td>
                     </tr>
 
                  <tr >

@@ -280,8 +280,8 @@
                         <td>No.</td>
                         <td>Description</td>
                         <td>Qty</td>
-                        <td>Price (THB)</td>
-                        <td>Total Amount (THB)</td>
+                        <td>Price (MMK)</td>
+                        <td>Total Amount (MMK)</td>
                     </tr>
 
                  <tr >
