@@ -852,7 +852,7 @@ class BillingController extends Controller
             $townships = Township::get();
             $status = Status::get();
             $users = User::join('roles', 'users.role', 'roles.id')
-                ->where('roles.name', 'LIKE', '%Cashier%')
+                ->where('roles.name', 'LIKE', '%Sale%')
                 ->select('users.*')
                 ->orderBy('users.name', 'ASC')->get();
 

@@ -78,10 +78,10 @@
               <label class="text-xs">{{ paid_percent }}% Percentage of {{ (paid) ? new Intl.NumberFormat('en-US', {
                 maximumSignificantDigits: 8
               }).format(paid) : 0
-                }} BAHT in {{ new Intl.NumberFormat('en-US', {
+                }} Kyats in {{ new Intl.NumberFormat('en-US', {
                   maximumSignificantDigits: 8
                 }).format(receivable)
-                }} BAHT</label>
+                }} Kyats</label>
               <div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-lightBlue-200 z-10">
                 <div :style="`width: ${paid_percent}%`"
                   class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-lightBlue-500 z-10">
@@ -302,8 +302,9 @@
                 <div class="col-span-3 sm:col-span-3 border-b-2 border-marga">
                   <div class="flex">
                     <label class="flex-auto items-center mt-1"> <input type="radio"
-                        class="form-radio h-5 w-5 text-yellow-700" checked name="type" v-model="form.type"
-                        value="mcb_pay" /><span class="ml-2 text-gray-700 text-xs font-semibold">MCB Pay</span> </label>
+                        class="form-radio h-5 w-5 text-yellow-400" checked name="type" v-model="form.type"
+                        value="wave_pay" /><span class="ml-2 text-gray-700 text-xs font-semibold">Wave Pay</span>
+                    </label>
                     <label class="flex-auto items-center mt-1"> <input type="radio"
                         class="form-radio h-5 w-5 text-blue-700" name="type" v-model="form.type" value="kbz_pay" /><span
                         class="ml-2 text-gray-700 text-xs font-semibold">KPay</span> </label>

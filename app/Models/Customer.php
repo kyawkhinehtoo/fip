@@ -77,7 +77,7 @@ class Customer extends Model
         'social_account',
         'pop_device_id',
         'gpon_ontid',
-        'gem_port',
+        'port_balance',
         'service_activation_date',
     ];
 

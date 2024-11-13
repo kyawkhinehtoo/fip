@@ -1,127 +1,142 @@
 <template>
   <!-- Advance Search -->
   <div class="bg-white shadow sm:rounded-t-lg py-2 px-2 md:px-2">
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 w-full">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-2 w-full">
       <div class="col-span-1 sm:col-span-1">
-        <div class="py-2">
-          <label for="sh_general" class="block text-sm font-medium text-gray-700">General </label>
-          <div class="mt-1 flex rounded-md shadow-sm">
-            <span
-              class="z-10 leading-snug font-normal absolute text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
-              <i class="fas fa-user"></i>
-            </span>
-            <input type="text" v-model="sh_general" name="sh_general" id="sh_general"
-              class="pl-10 py-2.5 focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300"
-              placeholder="Customer/Company Name etc." tabindex="1" />
-          </div>
+        <label for="sh_general" class="block text-sm font-medium text-gray-700">General </label>
+        <div class="mt-1 flex rounded-md shadow-sm">
+          <span
+            class="z-10 leading-snug font-normal  text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
+            <i class="fas fa-user"></i>
+          </span>
+          <input type="text" v-model="sh_general" name="sh_general" id="sh_general"
+            class="pl-10 py-2.5 focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300"
+            placeholder="Customer/Company Name etc." tabindex="1" />
         </div>
-      </div>
-      <!-- <div class="col-span-1 sm:col-span-1">
-        <div class="py-2">
-          <label for="sh_package" class="block text-sm font-medium text-gray-700">Package </label>
-          <div class="mt-1 flex rounded-md shadow-sm">
-            <span class="z-10 leading-snug font-normal absolute text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
-              <i class="fas fa-user"></i>
-            </span>
-            <select id="sh_package" v-model="sh_package" name="sh_package" class="pl-10 py-2.5 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" tabindex="2">
-              <option value="0">-Choose Package-</option>
-              <option value="empty">-No Package-</option>
-              <option v-for="row in packages" v-bind:key="row.id" :value="row.id">{{ row.item_data }}</option>
-            </select>
-          </div>
-        </div>
-      </div> -->
-      <div class="col-span-1 sm:col-span-1">
-        <div class="py-2">
-          <label for="sh_package_speed" class="block text-sm font-medium text-gray-700">Package </label>
-          <div class="mt-1 flex rounded-md shadow-sm">
-            <span
-              class="z-10 leading-snug font-normal text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
-              <i class="fas fa-user"></i>
-            </span>
-            <select id="sh_package_speed" v-model="sh_package_speed" name="sh_package"
-              class="pl-10 py-2.5 block w-full px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              tabindex="2">
-              <option value="0">-Choose Package-</option>
-              <option v-for="row in package_speed" v-bind:key="row.speed" :value="row.speed + '|' + row.type">{{
-                row.item_data }}</option>
-            </select>
-          </div>
-        </div>
+
       </div>
       <div class="col-span-1 sm:col-span-1">
-        <div class="py-2">
-          <label for="sh_township" class="block text-sm font-medium text-gray-700">Township </label>
-          <div class="mt-1 flex rounded-md shadow-sm">
-            <span
-              class="z-10 leading-snug font-normal absolute text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
-              <i class="fas fa-user"></i>
-            </span>
-            <select id="sh_township" v-model="sh_township" name="sh_township"
-              class="pl-10 py-2.5 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              tabindex="3">
-              <option value="0">-Choose Township -</option>
-              <option value="empty">-No Township -</option>
-              <option v-for="row in townships" v-bind:key="row.id" :value="row.id">{{ row.name }}</option>
-            </select>
-          </div>
+        <label for="sh_package_speed" class="block text-sm font-medium text-gray-700">Package </label>
+        <div class="mt-1 flex rounded-md shadow-sm">
+          <span
+            class="z-10 leading-snug font-normal text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
+            <i class="fas fa-user"></i>
+          </span>
+          <select id="sh_package_speed" v-model="sh_package_speed" name="sh_package"
+            class="pl-10 py-2.5 block w-full px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            tabindex="2">
+            <option value="0">-Choose Package-</option>
+            <option v-for="row in package_speed" v-bind:key="row.speed" :value="row.speed + '|' + row.type">{{
+              row.item_data }}</option>
+          </select>
+        </div>
+
+      </div>
+      <div class="col-span-1 sm:col-span-1">
+        <label for="sh_township" class="block text-sm font-medium text-gray-700">Township </label>
+        <div class="mt-1 flex rounded-md shadow-sm">
+          <span
+            class="z-10 leading-snug font-normal  text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
+            <i class="fas fa-user"></i>
+          </span>
+          <select id="sh_township" v-model="sh_township" name="sh_township"
+            class="pl-10 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            tabindex="3">
+            <option value="0">-Choose Township -</option>
+            <option value="empty">-No Township -</option>
+            <option v-for="row in townships" v-bind:key="row.id" :value="row.id">{{ row.name }}</option>
+          </select>
+        </div>
+
+      </div>
+      <div class="col-span-1 sm:col-span-1">
+        <label for="sh_status" class="block text-sm font-medium text-gray-700">Customer Status </label>
+        <div class="mt-1 flex rounded-md shadow-sm">
+          <span
+            class="z-10 leading-snug font-normal  text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
+            <i class="fas fa-user"></i>
+          </span>
+          <select id="sh_status" v-model="sh_status" name="sh_status"
+            class="pl-10 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            tabindex="7">
+            <option value="0">-Choose Status -</option>
+            <option v-for="row in status" v-bind:key="row.id" :value="row.id">{{ row.name }}</option>
+          </select>
+        </div>
+
+      </div>
+      <div class="col-span-1 sm:col-span-1">
+        <label for="sh_package" class="block text-sm font-medium text-gray-700">Prefer Date </label>
+        <div class="mt-1 flex rounded-md shadow-sm">
+          <litepie-datepicker placeholder="Please choose Prefer Installation  Date" :formatter="formatter"
+            separator=" to " v-model="sh_prefer" tabindex="5"></litepie-datepicker>
+        </div>
+
+      </div>
+      <div class="col-span-1 sm:col-span-1">
+        <label for="sh_installation" class="block text-sm font-medium text-gray-700">Installation Date </label>
+        <div class="mt-1 flex rounded-md shadow-sm">
+          <litepie-datepicker placeholder="Please choose Installation Date" :formatter="formatter" separator=" to "
+            v-model="sh_installation" tabindex="6"></litepie-datepicker>
+        </div>
+
+      </div>
+      <div class="col-span-1 sm:col-span-1">
+        <label for="sh_dn" class="block text-sm font-medium text-gray-700">DN </label>
+        <div class="mt-1 flex rounded-md shadow-sm">
+          <multiselect deselect-label="Selected already" :options="dn" track-by="name" label="name" v-model="sh_dn"
+            :allow-empty="true" @select="DNSelect" placeholder="Please Choose DN"></multiselect>
+        </div>
+
+      </div>
+      <div class="col-span-1 sm:col-span-1">
+        <label for="sh_sn" class="block text-sm font-medium text-gray-700">SN </label>
+        <div class="mt-1 flex rounded-md shadow-sm" v-if="res_sn">
+          <multiselect deselect-label="Selected already" :options="res_sn" track-by="id" label="name" v-model="sh_sn"
+            :allow-empty="true"></multiselect>
+        </div>
+        <div v-else>
+          <input type="text"
+            class="py-2.5 focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm text-gray-500 border-gray-300"
+            value="Please Choose SN" disabled />
+        </div>
+
+      </div>
+      <!-- third row -->
+      <div class="col-span-1 sm:col-span-1">
+        <label for="sh_vlan" class="block text-sm font-medium text-gray-700">VLAN </label>
+        <div class="mt-1 flex rounded-md shadow-sm">
+          <span
+            class="z-10 leading-snug font-normal  text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
+            <i class="fas fa-user"></i>
+          </span>
+          <input type="number" v-model="sh_vlan" name="sh_vlan" id="sh_vlan"
+            class="pl-10 py-2.5 focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300"
+            placeholder="VLAN ID" tabindex="9" />
         </div>
       </div>
       <div class="col-span-1 sm:col-span-1">
-        <div class="py-2">
-          <label for="sh_status" class="block text-sm font-medium text-gray-700">Customer Status </label>
-          <div class="mt-1 flex rounded-md shadow-sm">
-            <span
-              class="z-10 leading-snug font-normal absolute text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
-              <i class="fas fa-user"></i>
-            </span>
-            <select id="sh_status" v-model="sh_status" name="sh_status"
-              class="pl-10 py-2.5 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              tabindex="7">
-              <option value="0">-Choose Status -</option>
-              <option v-for="row in status" v-bind:key="row.id" :value="row.id">{{ row.name }}</option>
-            </select>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 w-full">
-      <div class="col-span-1 sm:col-span-1">
-        <div class="py-2">
-          <label for="sh_package" class="block text-sm font-medium text-gray-700">Prefer Date </label>
-          <div class="mt-1 flex rounded-md shadow-sm">
-            <litepie-datepicker placeholder="Please choose Prefer Installation  Date" :formatter="formatter"
-              separator=" to " v-model="sh_prefer" tabindex="5"></litepie-datepicker>
-          </div>
+        <label for="onu_serial" class="block text-sm font-medium text-gray-700">ONU Serial </label>
+        <div class="mt-1 flex rounded-md shadow-sm" v-if="onuSerials">
+          <multiselect deselect-label="Selected already" :options="onuSerials" track-by="onu_serial" label="onu_serial"
+            v-model="sh_onu_serial" :allow-empty="true"></multiselect>
         </div>
       </div>
       <div class="col-span-1 sm:col-span-1">
-        <div class="py-2">
-          <label for="sh_installation" class="block text-sm font-medium text-gray-700">Installation Date </label>
-          <div class="mt-1 flex rounded-md shadow-sm">
-            <litepie-datepicker placeholder="Please choose Installation Date" :formatter="formatter" separator=" to "
-              v-model="sh_installation" tabindex="6"></litepie-datepicker>
-          </div>
+        <label for="sale_person" class="block text-sm font-medium text-gray-700">Sale Person</label>
+        <div class="mt-1 flex rounded-md shadow-sm" v-if="salePersons">
+          <multiselect deselect-label="Selected already" :options="salePersons" track-by="id" label="name"
+            v-model="sh_sale_person" :allow-empty="true"></multiselect>
         </div>
       </div>
       <div class="col-span-1 sm:col-span-1">
-        <div class="py-2">
-          <label for="sh_dn" class="block text-sm font-medium text-gray-700">DN </label>
-          <div class="mt-1 flex rounded-md shadow-sm">
-            <multiselect deselect-label="Selected already" :options="dn" track-by="name" label="name" v-model="sh_dn"
-              :allow-empty="true" @select="DNSelect"></multiselect>
-          </div>
+        <label for="installation_team" class="block text-sm font-medium text-gray-700">Installation Team</label>
+        <div class="mt-1 flex rounded-md shadow-sm" v-if="installationTeams">
+          <multiselect deselect-label="Selected already" :options="installationTeams" track-by="id" label="name"
+            v-model="sh_installation_team" :allow-empty="true"></multiselect>
         </div>
       </div>
-      <div class="col-span-1 sm:col-span-1">
-        <div class="py-2">
-          <label for="sh_sn" class="block text-sm font-medium text-gray-700">SN </label>
-          <div class="mt-1 flex rounded-md shadow-sm" v-if="res_sn">
-            <multiselect deselect-label="Selected already" :options="res_sn" track-by="id" label="name" v-model="sh_sn"
-              :allow-empty="true"></multiselect>
-          </div>
-        </div>
-      </div>
+      <!-- end third row -->
     </div>
   </div>
   <div class="mb-2 py-2 px-2 md:px-2 bg-white shadow rounded-b-lg flex justify-between">
@@ -133,7 +148,7 @@
         class="ml-2 cursor-pointer inline-flex items-center px-4 py-2 bg-gray-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-400 active:bg-gray-500 focus:outline-none focus:border-gray-500 focus:ring focus:ring-gray-200 disabled:opacity-25 transition">Reset
         <i class="ml-1 fa fa-undo-alt text-white" tabindex="10"></i></a>
     </div>
-    <div class="flex">
+    <div class="flex" v-if="role.enable_customer_export">
       <a @click="doExcel"
         class="cursor-pointer inline-flex items-center px-4 py-2 bg-green-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 active:bg-green-900 focus:outline-none focus:border-green-900 focus:ring focus:ring-green-300 disabled:opacity-25 transition">Export
         Excel <i class="ml-1 fa fa-download text-white" tabindex="11"></i></a>
@@ -161,6 +176,11 @@ export default {
     const status = inject("status");
     const dn = inject("dn");
     const package_speed = inject("package_speed");
+    const salePersons = inject("salePersons");
+    const installationTeams = inject("installationTeams");
+    const onuSerials = inject("onuSerials");
+    const role = inject("role");
+
     const formatter = ref({
       date: "YYYY-MM-DD",
       month: "MMM",
@@ -181,6 +201,10 @@ export default {
     let sh_dn = ref(0);
     let sh_sn = ref(0);
     let sh_package_speed = ref(0);
+    let sh_vlan = ref(0);
+    let sh_onu_serial = ref(0);
+    let sh_installation_team = ref(0);
+    let sh_sale_person = ref(0);
 
     const clearSearch = () => {
       let myurl = Object.create({});
@@ -191,6 +215,10 @@ export default {
       sh_status.value = 0;
       sh_dn.value = 0;
       sh_sn.value = 0;
+      sh_vlan.value = 0;
+      sh_onu_serial.value = 0;
+      sh_installation_team.value = 0;
+      sh_sale_person.value = 0;
       sh_package_speed.value = 0;
       sh_installation.value = Object({ from: "", to: "" });
       sh_prefer.value = Object({ from: "", to: "" });
@@ -221,6 +249,18 @@ export default {
       }
       if (sh_sn.value != 0) {
         myurl.sn = sh_sn.value;
+      }
+      if (sh_vlan.value != 0) {
+        myurl.sh_vlan = sh_vlan.value;
+      }
+      if (sh_onu_serial.value != 0) {
+        myurl.sh_onu_serial = sh_onu_serial.value;
+      }
+      if (sh_installation_team.value != 0) {
+        myurl.sh_installation_team = sh_installation_team.value;
+      }
+      if (sh_sale_person.value != 0) {
+        myurl.sh_sale_person = sh_sale_person.value;
       }
       if (sh_package_speed.value != 0) {
         myurl.package_speed = sh_package_speed.value;
@@ -280,7 +320,18 @@ export default {
       if (sh_prefer.value.from != "" && sh_prefer.value.to != "") {
         myurl.prefer = sh_prefer.value;
       }
-
+      if (sh_vlan.value != 0) {
+        myurl.sh_vlan = sh_vlan.value;
+      }
+      if (sh_onu_serial.value != 0) {
+        myurl.sh_onu_serial = sh_onu_serial.value;
+      }
+      if (sh_installation_team.value != 0) {
+        myurl.sh_installation_team = sh_installation_team.value;
+      }
+      if (sh_sale_person.value != 0) {
+        myurl.sh_sale_person = sh_sale_person.value;
+      }
       context.emit("search_parameter", myurl);
     };
 
@@ -330,6 +381,14 @@ export default {
       doSearch,
       clearSearch,
       DNSelect,
+      salePersons,
+      installationTeams,
+      onuSerials,
+      sh_vlan,
+      sh_onu_serial,
+      sh_installation_team,
+      sh_sale_person,
+      role
     };
   },
 };

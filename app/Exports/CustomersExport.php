@@ -131,6 +131,19 @@ class CustomersExport implements FromQuery, WithColumnFormatting, WithMapping, W
             ->when($request->installation, function ($query, $installation) {
                 $query->whereBetween('customers.installation_date', $installation);
             })
+            ->when($request->sh_vlan, function ($query, $vlan) {
+                $query->where('customers.vlan', $vlan);
+            })
+
+            ->when($request->sh_onu_serial, function ($query, $sh_onu_serial) {
+                $query->where('customers.onu_serial', $sh_onu_serial);
+            })
+            ->when($request->sh_installation_team, function ($query, $sh_installation_team) {
+                $query->where('customers.subcom_id', $sh_installation_team['id']);
+            })
+            ->when($request->sh_sale_person, function ($query, $sh_sale_person) {
+                $query->where('customers.sale_person_id', $sh_sale_person['id']);
+            })
             ->when($request->sort, function ($query, $sort = null) {
                 $sort_by = 'customers.id';
                 if ($sort == 'cid') {
@@ -188,7 +201,7 @@ class CustomersExport implements FromQuery, WithColumnFormatting, WithMapping, W
             'GPON Slot',
             'GPON Port',
             'ONT ID',
-            'GEM PORT',
+            'Port Balance',
             'DN',
             'SN',
             'VLAN',
@@ -272,7 +285,7 @@ class CustomersExport implements FromQuery, WithColumnFormatting, WithMapping, W
             $mycustomer->gpon_slot,
             $mycustomer->gpon_port,
             $mycustomer->gpon_ontid,
-            $mycustomer->gem_port,
+            $mycustomer->port_balance,
             $mycustomer->dn_port,
             $mycustomer->sn_port,
 

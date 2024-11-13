@@ -394,13 +394,9 @@
                   <div class="col-span-1 sm:col-span-1">
                     <label for="splitter_no" class="block text-sm font-medium text-gray-700"> SN Port No. </label>
                     <div class="mt-1 flex rounded-md shadow-sm">
-                      <span
-                        class="z-10 leading-snug font-normal text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
-                        <i class="fas fa-tools"></i>
-                      </span>
-                      <input v-model="form.splitter_no" type="text" name="splitter_no" id="splitter_no"
-                        class="pl-10 focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300"
-                        placeholder="Optional.." :disabled="checkPerm('splitter_no')" />
+                      <multiselect deselect-label="Selected already" :options="snPortNoOptions" track-by="id"
+                        label="name" v-model="form.splitter_no" :allow-empty="true" :disabled="checkPerm('sn_id')">
+                      </multiselect>
                       <p v-show="$page.props.errors.splitter_no" class="mt-2 text-sm text-red-500">{{
                         $page.props.errors.splitter_no }}</p>
                     </div>
@@ -410,30 +406,26 @@
                   <div class="col-span-1 sm:col-span-1">
                     <label for="gpon_ontid" class="block text-sm font-medium text-gray-700"> GPON ONTID </label>
                     <div class="mt-1 flex rounded-md shadow-sm">
-                      <span
-                        class="z-10 leading-snug font-normal text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
-                        <i class="fas fa-tools"></i>
-                      </span>
-                      <input v-model="form.gpon_ontid" type="text" name="gpon_ontid" id="gpon_ontid"
-                        class="pl-10 focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300"
-                        placeholder="Optional.." :disabled="checkPerm('gpon_ontid')" />
+                      <multiselect deselect-label="Selected already" :options="gponOnuIdOptions" track-by="id"
+                        label="name" v-model="form.gpon_ontid" :allow-empty="true" :disabled="checkPerm('gpon_ontid')">
+                      </multiselect>
                       <p v-show="$page.props.errors.gpon_ontid" class="mt-2 text-sm text-red-500">{{
                         $page.props.errors.gpon_ontid }}</p>
                     </div>
                   </div>
 
                   <div class="col-span-1 sm:col-span-1">
-                    <label for="gem_port" class="block text-sm font-medium text-gray-700"> GEM Port</label>
+                    <label for="port_balance" class="block text-sm font-medium text-gray-700"> Port Balance</label>
                     <div class="mt-1 flex rounded-md shadow-sm">
                       <span
                         class="z-10 leading-snug font-normal text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
                         <i class="fas fa-tools"></i>
                       </span>
-                      <input v-model="form.gem_port" type="text" name="gem_port" id="gem_port"
+                      <input v-model="form.port_balance" type="number" name="port_balance" id="port_balance"
                         class="pl-10 focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300"
-                        placeholder="Optional.." :disabled="checkPerm('gem_port')" />
-                      <p v-show="$page.props.errors.gem_port" class="mt-2 text-sm text-red-500">{{
-                        $page.props.errors.gem_port }}</p>
+                        placeholder="Enter Port Balance" :disabled="checkPerm('port_balance')" />
+                      <p v-show="$page.props.errors.port_balance" class="mt-2 text-sm text-red-500">{{
+                        $page.props.errors.port_balance }}</p>
                     </div>
                   </div>
 
@@ -721,12 +713,23 @@ export default {
       email: "",
       pop_device_id: "",
       gpon_ontid: "",
-      gem_port: "",
+      port_balance: "",
     });
 
     function resetForm() {
       form.reset();
     }
+
+    // SN Port Number
+    const snPortNoOptions = ref(
+      Array.from({ length: 16 }, (v, i) => ({ id: i + 1, name: `SN Port ${i + 1}` }))
+    );
+
+    const gponOnuIdOptions = ref(
+      Array.from({ length: 127 }, (v, i) => ({ id: i, name: `OnuID${i}` }))
+    );
+
+
     function submit() {
       form._method = "POST";
       Inertia.post("/customer", form, {
@@ -795,7 +798,7 @@ export default {
           form.gpon_slot = null;
           form.gpon_port = null;
           form.gpon_ontid = null;
-          form.gem_port = null;
+          form.port_balance = null;
         } else {
           pop_devices.value = null;
           form.sn_id = null;
@@ -805,7 +808,7 @@ export default {
           form.gpon_slot = null;
           form.gpon_port = null;
           form.gpon_ontid = null;
-          form.gem_port = null;
+          form.port_balance = null;
         }
         return true;
       } catch (err) {
@@ -957,7 +960,7 @@ export default {
       form.status = props.status_list[0];
       goID();
     });
-    return { form, submit, resetForm, isNumber, checkPerm, res_sn, res_dn, DNSelect, goID, fillPppoe, pppoe_auto, generatePassword, POPSelect, OLTSelect, res_packages, isEmptyObject, pop_devices };
+    return { form, submit, resetForm, isNumber, checkPerm, res_sn, res_dn, DNSelect, goID, fillPppoe, pppoe_auto, generatePassword, POPSelect, OLTSelect, res_packages, isEmptyObject, pop_devices, snPortNoOptions, gponOnuIdOptions };
   },
 };
 </script>

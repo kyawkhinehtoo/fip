@@ -60,6 +60,7 @@ class RoleController extends Controller
         $role->edit_ip = $request->edit_ip;
         $role->delete_ip = $request->delete_ip;
         $role->ip_report = $request->ip_report;
+        $role->enable_customer_export = $request->enable_customer_export;
 
         $role->save();
         return redirect()->route('role.index')->with('message', 'Role Created Successfully.');
@@ -110,7 +111,7 @@ class RoleController extends Controller
             $role->edit_ip = $request->edit_ip;
             $role->delete_ip = $request->delete_ip;
             $role->ip_report = $request->ip_report;
-
+            $role->enable_customer_export = $request->enable_customer_export;
             $role->update();
             return redirect()->back()
                 ->with('message', 'Role Updated Successfully.');

@@ -313,7 +313,7 @@
                             label="ftth_id" v-model="form.customer_id" :allow-empty="false"></multiselect>
                         </div>
                         <p v-if="$page.props.errors.customer" class="mt-2 text-sm text-red-500">{{
-                $page.props.errors.customer }}</p>
+                          $page.props.errors.customer }}</p>
                       </div>
                       <!-- end of user id -->
                       <!-- person incharge  -->
@@ -329,7 +329,7 @@
                             v-model="form.incharge_id" :allow-empty="false" :disabled="true"></multiselect>
                         </div>
                         <p v-if="$page.props.errors.incharge" class="mt-2 text-sm text-red-500">{{
-                $page.props.errors.incharge }}</p>
+                          $page.props.errors.incharge }}</p>
                       </div>
                       <!-- end of person incharge -->
                       <!-- type -->
@@ -342,14 +342,13 @@
                         <div class="mt-1 flex">
                           <select v-model="form.type"
                             class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300"
-                            required>
+                            required @change="form.topic = null">
                             <option value="default">Please Choose Ticket Type</option>
                             <option value="service_complaint">Service Complaint</option>
-                            <option value="relocation">Relocation</option>
+                            <option value="onsite_complaint">Onsite Complaint</option>
+                            <option value="technical_complaint">Technical Complaint</option>
                             <option value="plan_change">Plan Change</option>
-                            <option value="information_update">Information Update</option>
                             <option value="suspension">Suspension</option>
-                            <option value="resume">Resume</option>
                             <option value="termination">Termination</option>
                           </select>
                         </div>
@@ -358,7 +357,8 @@
                       </div>
                       <!-- end of type -->
                       <!-- topic -->
-                      <div class="py-2 col-span-1 sm:col-span-1" v-if="form.type == 'service_complaint'">
+                      <div class="py-2 col-span-1 sm:col-span-1"
+                        v-if="form.type == 'service_complaint' || form.type == 'onsite_complaint' | form.type == 'technical_complaint'">
                         <div class="mt-1 flex">
                           <label for="topic" class="block text-sm font-medium text-gray-700 mt-2 mr-2"> Topic : </label>
                         </div>
@@ -367,14 +367,43 @@
                         <div class="mt-1 flex">
                           <select v-model="form.topic"
                             class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300">
-                            <option value="no_internet">No Internet</option>
                             <option value="los_redlight">LOS Redlight</option>
+                            <option value="pon_blinking">PON Blinking</option>
+                            <option value="high_loss">High Loss</option>
+                            <option value="dn_down">DN Down</option>
+                            <option value="sn_down">SN Down</option>
+                            <option value="relocation">Relocation</option>
+                            <option value="maintenance">Maintenance</option>
+                            <option value="other">Other</option>
+                          </select>
+                        </div>
+                        <p v-if="$page.props.errors.topic" class="mt-2 text-sm text-red-500">{{ $page.props.errors.topic
+                          }}</p>
+                      </div>
+                      <div class="py-2 col-span-4 sm:col-span-4" v-if="form.type == 'onsite_complaint'">
+                        <div class="mt-1 flex">
+                          <select v-model="form.topic"
+                            class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300">
+                            <option value="no_internet">No Internet</option>
                             <option value="slow_performance">Slow Performance</option>
                             <option value="wifi_issue">Wifi Issue</option>
                             <option value="coverage_issue">Coverage Issue</option>
-                            <option value="gaming_issue">Gaming Issue</option>
-                            <option value="onu_issue">ONU Issue</option>
-                            <option value="password_change">Password Changed</option>
+                            <option value="onu_issue">ONU issue</option>
+                            <option value="home_router_issue">Home Router Issue</option>
+                            <option value="password_change">Password Change</option>
+                            <option value="other">Other</option>
+                          </select>
+                        </div>
+                        <p v-if="$page.props.errors.topic" class="mt-2 text-sm text-red-500">{{ $page.props.errors.topic
+                          }}</p>
+                      </div>
+                      <div class="py-2 col-span-4 sm:col-span-4" v-if="form.type == 'technical_complaint'">
+                        <div class="mt-1 flex">
+                          <select v-model="form.topic"
+                            class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300">
+                            <option value="website_delay_issue">Website Delay Issue</option>
+                            <option value="gaming_delay_issue">Gaming Delay Issue</option>
+                            <option value="application_delay_issue">Application Delay Issue</option>
                             <option value="other">Other</option>
                           </select>
                         </div>
@@ -400,7 +429,7 @@
                           </select>
                         </div>
                         <p v-if="$page.props.errors.status" class="mt-2 text-sm text-red-500">{{
-                $page.props.errors.status }}</p>
+                          $page.props.errors.status }}</p>
                       </div>
                       <!-- end of status -->
                       <!-- close date time -->
@@ -417,7 +446,7 @@
                             class="form-input focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300" />
                         </div>
                         <p v-if="$page.props.errors.close_date" class="mt-2 text-sm text-red-500">{{
-                $page.props.errors.close_date }}</p>
+                          $page.props.errors.close_date }}</p>
                       </div>
                       <div class="py-2 col-span-2 sm:col-span-2" v-if="form.status == 3">
                         <div class="mt-1 flex rounded-md shadow-sm">
@@ -425,7 +454,7 @@
                             class="form-input focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300" />
                         </div>
                         <p v-if="$page.props.errors.close_time" class="mt-2 text-sm text-red-500">{{
-                $page.props.errors.close_time }}</p>
+                          $page.props.errors.close_time }}</p>
                       </div>
 
                       <!-- close date time -->
@@ -443,7 +472,7 @@
                             class="form-input focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300" />
                         </div>
                         <p v-if="$page.props.errors.resolved_date" class="mt-2 text-sm text-red-500">{{
-                $page.props.errors.resolved_date }}</p>
+                          $page.props.errors.resolved_date }}</p>
                       </div>
                       <div class="py-2 col-span-2 sm:col-span-2" v-if="form.status == 5">
                         <div class="mt-1 flex rounded-md shadow-sm">
@@ -451,7 +480,7 @@
                             class="form-input focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300" />
                         </div>
                         <p v-if="$page.props.errors.resolved_time" class="mt-2 text-sm text-red-500">{{
-                $page.props.errors.resolved_time }}</p>
+                          $page.props.errors.resolved_time }}</p>
                       </div>
 
                       <!-- resolved date time -->
@@ -474,7 +503,7 @@
                                 class="pl-10 form-input focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300" />
                             </div>
                             <p v-if="$page.props.errors.start_date" class="mt-2 text-sm text-red-500">{{
-                $page.props.errors.start_date }}</p>
+                              $page.props.errors.start_date }}</p>
                           </div>
                           <div class="col-span-1 sm:col-span-1">
                             <div class="mt-1 flex rounded-md shadow-sm">
@@ -486,7 +515,7 @@
                                 class="pl-10 form-input focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300" />
                             </div>
                             <p v-if="$page.props.errors.end_date" class="mt-2 text-sm text-red-500">{{
-                $page.props.errors.end_date }}</p>
+                              $page.props.errors.end_date }}</p>
                           </div>
                         </div>
                       </div>
@@ -508,7 +537,7 @@
                             class="pl-10 form-input focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300" />
                         </div>
                         <p v-if="$page.props.errors.resume" class="mt-2 text-sm text-red-500">{{
-                $page.props.errors.start_date }}</p>
+                          $page.props.errors.start_date }}</p>
                       </div>
                       <!-- end of resume -->
                       <!-- termination -->
@@ -528,7 +557,7 @@
                             class="pl-10 form-input focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300" />
                         </div>
                         <p v-if="$page.props.errors.start_date" class="mt-2 text-sm text-red-500">{{
-                $page.props.errors.start_date }}</p>
+                          $page.props.errors.start_date }}</p>
                       </div>
                       <!-- end of termination -->
                       <!-- relocation address -->
@@ -544,7 +573,7 @@
                             class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300"> </textarea>
                         </div>
                         <p v-if="$page.props.errors.new_address" class="mt-2 text-sm text-red-500">{{
-                $page.props.errors.new_address }}</p>
+                          $page.props.errors.new_address }}</p>
                       </div>
                       <!-- end of relocation address -->
                       <!-- relocation township -->
@@ -560,7 +589,7 @@
                             v-model="form.new_township" :allow-empty="false"></multiselect>
                         </div>
                         <p v-if="$page.props.errors.new_township" class="mt-2 text-sm text-red-500">{{
-                $page.props.errors.new_township }}</p>
+                          $page.props.errors.new_township }}</p>
                       </div>
                       <!-- end of relocation township -->
                       <!-- relocation latlong -->
@@ -583,7 +612,7 @@
                                 placeholder="Latitude" />
                             </div>
                             <p v-if="$page.props.errors.latitude" class="mt-2 text-sm text-red-500">{{
-                $page.props.errors.latitude }}</p>
+                              $page.props.errors.latitude }}</p>
                           </div>
                           <div class="col-span-1 sm:col-span-1">
                             <div class="mt-1 flex rounded-md shadow-sm">
@@ -596,7 +625,7 @@
                                 placeholder="Longitude" />
                             </div>
                             <p v-if="$page.props.errors.longitude" class="mt-2 text-sm text-red-500">{{
-                $page.props.errors.longitude }}</p>
+                              $page.props.errors.longitude }}</p>
                           </div>
                         </div>
                       </div>
@@ -618,7 +647,7 @@
                             class="pl-10 form-input focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300" />
                         </div>
                         <p v-if="$page.props.errors.start_date" class="mt-2 text-sm text-red-500">{{
-                $page.props.errors.start_date }}</p>
+                          $page.props.errors.start_date }}</p>
                       </div>
                       <!-- relocation end date -->
                       <!-- plan change -->
@@ -634,7 +663,7 @@
                             label="item_data" v-model="form.package_id" :allow-empty="false"></multiselect>
                         </div>
                         <p v-if="$page.props.errors.package" class="mt-2 text-sm text-red-500">{{
-                $page.props.errors.package }}</p>
+                          $page.props.errors.package }}</p>
                       </div>
                       <!-- end of plan change -->
                       <!-- relocation start date -->
@@ -654,7 +683,7 @@
                             class="pl-10 form-input focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300" />
                         </div>
                         <p v-if="$page.props.errors.start_date" class="mt-2 text-sm text-red-500">{{
-                $page.props.errors.start_date }}</p>
+                          $page.props.errors.start_date }}</p>
                       </div>
                       <!-- relocation end date -->
                       <!-- detail -->
@@ -670,7 +699,7 @@
                             class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300"> </textarea>
                         </div>
                         <p v-if="$page.props.errors.description" class="mt-2 text-sm text-red-500">{{
-                $page.props.errors.description }}</p>
+                          $page.props.errors.description }}</p>
                       </div>
                       <!-- end of detail -->
                     </div>
@@ -837,6 +866,7 @@ export default {
     let selection = ref("");
     function typeChange(type) {
       selection.value = type;
+
     }
     function tabClick(val) {
       if (selected_id.value != null) {

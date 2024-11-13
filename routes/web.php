@@ -229,6 +229,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/dbbackup', [DBBackupController::class, 'index'])->name('dbbackup.index');
 	Route::post('/dbbackup', [DBBackupController::class, 'update'])->name('dbbackup.update');
 	Route::post('/dbbackup-store', [DBBackupController::class, 'backup'])->name('dbbackup.store');
+
+	Route::get('sync_radius', 'CustomerController@syncRadius')->name('sync_radius');
 });
 
 Route::get('/s/{shortURLKey}', '\AshAllenDesign\ShortURL\Controllers\ShortURLController');

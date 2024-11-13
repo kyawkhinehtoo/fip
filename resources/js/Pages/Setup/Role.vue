@@ -26,7 +26,8 @@
           <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
               <tr>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No.
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  No.
                 </th>
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Name</th>
@@ -85,7 +86,14 @@
                               type="checkbox" v-model="form.delete_customer" />
                             Enable Delete Customer
                           </label>
-                          <label for="permission" class="block text-gray-700 text-sm font-bold mb-2">Permission :</label>
+                          <label class="inline-flex ml-2 text-sm">
+                            <input
+                              class="text-gray-500 text-sm w-6 h-6 mr-2 focus:ring-gray-400 focus:ring-opacity-25 border border-gray-300 rounded"
+                              type="checkbox" v-model="form.enable_customer_export" />
+                            Enable Export Data
+                          </label>
+                          <label for="permission" class="block text-gray-700 text-sm font-bold mb-2">Permission
+                            :</label>
                           <!-- <select multiple>
                           <option v-for="row in col" v-bind:key="row.id" class="capitalize"> {{ row.name.replace(/_/g, " ") }}</option>
                         </select> -->
@@ -320,6 +328,7 @@ export default {
       edit_ip: null,
       delete_ip: null,
       ip_report: null,
+      enable_customer_export: null,
     });
     const search = ref("");
     let editMode = ref(false);
@@ -347,6 +356,7 @@ export default {
       form.edit_ip = null;
       form.delete_ip = null;
       form.ip_report = null;
+      form.enable_customer_export = null;
     }
     function submit() {
       if (!editMode.value) {
@@ -411,6 +421,7 @@ export default {
       form.edit_ip = (data.edit_ip) ? true : false;
       form.delete_ip = (data.delete_ip) ? true : false;
       form.ip_report = (data.ip_report) ? true : false;
+      form.enable_customer_export = (data.enable_customer_export) ? true : false;
       editMode.value = true;
       openModal();
     }

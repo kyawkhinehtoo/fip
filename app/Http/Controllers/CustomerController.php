@@ -47,7 +47,18 @@ class CustomerController extends Controller
         $projects = Project::get();
         $status = Status::get();
         $dn = DnPorts::get();
-
+        $salePersons = DB::table('users')
+            ->join('roles', 'users.role', '=', 'roles.id')
+            ->where('roles.name', 'LIKE', '%sale%')
+            ->select('users.name as name', 'users.id as id')
+            ->get();
+        $onuSerials = Customer::where('customers.deleted', '=', 0)
+            ->orWhereNull('customers.deleted')
+            ->select('onu_serial')
+            ->groupBy('onu_serial')
+            ->orderBy('onu_serial')
+            ->get();
+        $installationTeams = Subcom::all();
         $bundle_equiptments = BundleEquiptment::get();
         $active = DB::table('customers')
             ->join('status', 'customers.status_id', '=', 'status.id')
@@ -170,12 +181,30 @@ class CustomerController extends Controller
             ->when($request->status, function ($query, $status) {
                 $query->where('customers.status_id', '=', $status);
             })
+            ->when($request->status_type, function ($query, $status_type) {
+                $query->where('status.type', '=', $status_type);
+            })
             ->when($request->order, function ($query, $order) {
                 $query->whereBetween('customers.order_date', $order);
             })
             ->when($request->installation, function ($query, $installation) {
                 $query->whereBetween('customers.installation_date', $installation);
             })
+
+            ->when($request->sh_vlan, function ($query, $vlan) {
+                $query->where('customers.vlan', $vlan);
+            })
+
+            ->when($request->sh_onu_serial, function ($query, $sh_onu_serial) {
+                $query->where('customers.onu_serial', $sh_onu_serial);
+            })
+            ->when($request->sh_installation_team, function ($query, $sh_installation_team) {
+                $query->where('customers.subcom_id', $sh_installation_team['id']);
+            })
+            ->when($request->sh_sale_person, function ($query, $sh_sale_person) {
+                $query->where('customers.sale_person_id', $sh_sale_person['id']);
+            })
+
             ->when($request->sort, function ($query, $sort = null) {
                 $sort_by = 'customers.id';
                 if ($sort == 'cid') {
@@ -223,6 +252,9 @@ class CustomerController extends Controller
             'user' => $user,
             'role' => $role,
             'bundle_equiptments' => $bundle_equiptments,
+            'salePersons' => $salePersons,
+            'installationTeams' => $installationTeams,
+            'onuSerials' => $onuSerials,
         ]);
     }
 
@@ -371,6 +403,15 @@ class CustomerController extends Controller
                 if (!empty($request->pop_device_id))
                     $customer->$value = $request->pop_device_id['id'];
             }
+            if ($value == 'splitter_no') {
+                if (isset($request->splitter_no['id']))
+                    $customer->$value = $request->splitter_no['id'];
+            }
+            if ($value == 'gpon_ontid') {
+                if (isset($request->gpon_ontid['name']))
+                    $customer->$value = $request->gpon_ontid['name'];
+            }
+
             if ($value == 'bundle') {
                 if (!empty($request->bundles)) {
                     $customer->bundle = '';
@@ -678,6 +719,16 @@ class CustomerController extends Controller
                     if (isset($request->pop_device_id['id']))
                         $customer->$value = $request->pop_device_id['id'];
                 }
+                if ($value == 'splitter_no') {
+                    if (isset($request->splitter_no['id']))
+                        $customer->$value = $request->splitter_no['id'];
+                }
+                if ($value == 'gpon_ontid') {
+                    if (isset($request->gpon_ontid['name']))
+                        $customer->$value = $request->gpon_ontid['name'];
+                }
+
+
                 if ($value == 'bundle') {
                     if (!empty($request->bundles)) {
 
@@ -779,12 +830,37 @@ class CustomerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    public function syncRadius()
+    {
+        $customers = Customer::where('customers.deleted', '=', 0)
+            ->orWhereNull('customers.deleted')
+            ->get();
+        if (RadiusController::checkRadiusEnable()) {
+            foreach ($customers as $customer) {
+                if ($customer->pppoe_account) {
+                    $radius = RadiusController::checkCustomer($customer->pppoe_account);
+                    if ($radius != 'no account') {
+                        RadiusController::createRadius($customer->id);
+                        echo $customer->pppoe_account . ' Created! <br />';
+                    } else {
+                        echo $customer->pppoe_account . ' Already exists ! <br />';
+                    }
+                } else {
+                    echo $customer->ftth_id . ' No PPPOE Account ! <br />';
+                }
+            }
+        }
+        echo "Done";
+    }
     public function destroy(Request $request, $id)
     {
         if ($request->has('id')) {
             $customer = Customer::find($request->input('id'));
             $customer->deleted = 1;
             $customer->update();
+            if (RadiusController::checkRadiusEnable()) {
+                RadiusController::deleteUser($customer->id);
+            }
             return redirect()->back();
         }
     }
