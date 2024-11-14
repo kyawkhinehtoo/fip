@@ -1242,6 +1242,9 @@ export default {
       if (props.customer.pop_device_id && dnInfo.value && props.customer.sn_id) {
         gponInfo.value = `${props.devices.filter((d) => d.id = props.customer.pop_device_id)[0]['device_name']}/${dnInfo.value}`;
       }
+      if (gponInfo.value && props.customer.gpon_ontid) {
+        gponInfo.value += '/' + gponOnuIdOptions.value.filter((d) => d.name == props.customer.gpon_ontid)[0].name;
+      }
 
 
       //GPON Info - gponInfo <br />
