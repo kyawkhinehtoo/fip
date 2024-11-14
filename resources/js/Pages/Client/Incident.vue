@@ -24,22 +24,21 @@
               tabindex="3" @change="changeStatus">
               <option value="default">All Ticket</option>
               <option value="service_complaint">Service Complaint</option>
-              <option value="relocation">Relocation</option>
+              <option value="onsite_complaint">Onsite Complaint</option>
+              <option value="technical_complaint">Technical Complaint</option>
               <option value="plan_change">Plan Change</option>
-              <option value="information_update">Information Update</option>
               <option value="suspension">Suspension</option>
-              <option value="resume">Resume</option>
               <option value="termination">Termination</option>
             </select>
           </div>
 
           <div class="flex w-full">
             <span
-              class="z-10 mt-1 leading-snug font-normal absolute text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
+              class="z-10 mt-1 leading-snug font-normal text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
               <i class="fas fa-sliders-h"></i>
             </span>
             <select v-model="incidentBy"
-              class="relative self-center block w-full pl-3 pr-12 py-2.5 rounded-lg overflow-hidden text-sm text-litepie-secondary-700 placeholder-litepie-secondary-400 transition-colors bg-white border border-litepie-secondary-300 focus:border-litepie-primary-300 focus:ring focus:ring-litepie-primary-500 focus:ring-opacity-10 focus:outline-none dark:bg-litepie-secondary-800 dark:border-litepie-secondary-700 dark:text-litepie-secondary-100 dark:placeholder-litepie-secondary-500 dark:focus:border-litepie-primary-500 dark:focus:ring-opacity-20 pl-10"
+              class="relative self-center block w-full pl-3 pr-12 py-2.5 rounded-lg overflow-hidden text-sm text-litepie-secondary-700 placeholder-litepie-secondary-400 transition-colors bg-white border border-litepie-secondary-300 focus:border-litepie-primary-300 focus:ring focus:ring-litepie-primary-500 focus:ring-opacity-10 focus:outline-none dark:bg-litepie-secondary-800 dark:border-litepie-secondary-700 dark:text-litepie-secondary-100 dark:placeholder-litepie-secondary-500 dark:focus:border-litepie-primary-500 dark:focus:ring-opacity-20"
               tabindex="4" @change="changeStatus">
               <option value="default">All Member</option>
               <option v-for="row in noc" v-bind:key="row.id" :value="row.id">{{ row.name }}</option>
@@ -48,7 +47,7 @@
           </div>
           <div class="flex w-full">
             <span
-              class="z-10 mt-1 leading-snug font-normal absolute text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
+              class="z-10 mt-1 leading-snug font-normal  text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
               <i class="fas fa-sliders-h"></i>
             </span>
             <select v-model="incidentStatus"

@@ -221,7 +221,7 @@ class CustomerController extends Controller
 
                 $query->orderBy($sort_by, 'desc');
             }, function ($query) {
-                $query->orderBy('customers.id', 'desc');
+                $query->orderBy('customers.ftth_id', 'desc');
             })
             ->select('customers.id as id', 'customers.ftth_id as ftth_id', 'customers.name as name', 'customers.prefer_install_date as prefer_install_date', 'customers.order_date as order_date', 'customers.phone_1 as phone', 'townships.name as township', 'packages.name as package', 'status.name as status', 'status.color as color', 'customers.pppoe_account as pppoe_account')
             ->paginate(10);
