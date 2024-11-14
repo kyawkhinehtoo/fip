@@ -391,6 +391,10 @@
                         v-model="form.sn_id" :allow-empty="true" :disabled="checkPerm('sn_id')"></multiselect>
                     </div>
                   </div>
+                  <div class="text-sm text-gray-600 mt-2  col-span-4" v-if="dnInfo">
+                    GPON INFO : {{ dnInfo }}
+                    <hr class="my-4 md:min-w-full" />
+                  </div>
                   <div class="col-span-1 sm:col-span-1">
                     <label for="splitter_no" class="block text-sm font-medium text-gray-700"> SN Port No. </label>
                     <div class="mt-1 flex rounded-md shadow-sm">
@@ -665,6 +669,7 @@ export default {
     let pop_devices = ref("");
     let res_packages = ref("");
     let pppoe_auto = ref(false);
+    const dnInfo = ref(null);
     const form = useForm({
       id: null,
       name: "",
@@ -763,6 +768,7 @@ export default {
     }
     function DNSelect(dn) {
       console.log(dn.id);
+      dnInfo.value = `Frame${dn.gpon_frame}/Slot${dn.gpon_slot}/Port${dn.gpon_port}`;
       getSN(dn.id).then((d) => {
         console.log(d)
         if (d) {
@@ -960,7 +966,7 @@ export default {
       form.status = props.status_list[0];
       goID();
     });
-    return { form, submit, resetForm, isNumber, checkPerm, res_sn, res_dn, DNSelect, goID, fillPppoe, pppoe_auto, generatePassword, POPSelect, OLTSelect, res_packages, isEmptyObject, pop_devices, snPortNoOptions, gponOnuIdOptions };
+    return { form, submit, resetForm, isNumber, checkPerm, res_sn, res_dn, DNSelect, goID, fillPppoe, pppoe_auto, generatePassword, POPSelect, OLTSelect, res_packages, isEmptyObject, pop_devices, snPortNoOptions, gponOnuIdOptions, dnInfo, };
   },
 };
 </script>

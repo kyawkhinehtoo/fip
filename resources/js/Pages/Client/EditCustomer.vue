@@ -18,6 +18,9 @@
                       @click="tabClick(2)" preserve-state>Documents <span
                         class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">{{
                           total_documents }}</span></a></li>
+                  <li class="px-2 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider "
+                    :class="[tab == 6 ? 'border-b-2 border-indigo-400 -mb-px' : 'opacity-50']"><a href="#"
+                      @click="tabClick(6)" preserve-state>Text</a></li>
                   <li class="px-2 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                     :class="[tab == 3 ? 'border-b-2 border-indigo-400 -mb-px' : 'opacity-50']"><a href="#"
                       @click="tabClick(3)" preserve-state>History</a></li>
@@ -412,6 +415,7 @@
                             v-model="form.dn_id" :allow-empty="false" @select="DNSelect" :disabled="checkPerm('sn_id')">
                           </multiselect>
                         </div>
+
                       </div>
 
                       <div class="col-span-1 sm:col-span-1">
@@ -422,6 +426,12 @@
                             v-model="form.sn_id" :allow-empty="true" :disabled="checkPerm('sn_id')"></multiselect>
                         </div>
                       </div>
+                      <div class="text-sm text-gray-600 mt-2  col-span-4" v-if="dnInfo">
+                        GPON INFO : {{ dnInfo }}
+                        <hr class="my-4 md:min-w-full" />
+                      </div>
+
+
                       <div class="col-span-1 sm:col-span-1">
                         <label for="splitter_no" class="block text-sm font-medium text-gray-700"> SN Port No. </label>
                         <div class="mt-1 flex rounded-md shadow-sm">
@@ -704,6 +714,54 @@
 
                   </div>
                 </div>
+                <div class="p-4" :class="[tab == 6 ? '' : 'hidden']">
+                  <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
+                    <div class="w-full flex justify-between">
+                      <h6 class="text-indigo-700 text-xs uppercase font-bold block pt-1 no-underline">Text
+
+                      </h6>
+                      <span class="gap-2">
+                        <a href="#" @click="copyText()">Copy <i
+                            class="ml-2 fa text-xl fa-copy text-right text-indigo-500 hover:text-indigo-700 cursor-pointer"></i></a>
+                        |
+                        <a href="#" @click="shareText()">
+                          Share <i
+                            class="fa text-xl fa-share-nodes text-right text-indigo-500 hover:text-indigo-700 cursor-pointer"></i>
+                        </a>
+                      </span>
+
+
+                    </div>
+
+                    <hr class="my-4 md:min-w-full" />
+
+                    <div id="text-code" ref="textContent">
+                      Sales: {{ form.sale_person.name }}<br />
+                      Sales Source – {{ form.sale_channel }}<br />
+                      Customer ID – {{ form.ftth_id }}<br />
+                      Service Order Date - {{ form.order_date }}<br />
+                      Customer Name – {{ form.name }}<br />
+                      Contact Number – {{ form.phone_1 }} {{ form.phone_2 }}<br />
+                      Contact E Mail - {{ form.email }}<br />
+                      Township – {{ form.township['name'] }}<br />
+                      Fully Address – {{ form.address }}<br />
+                      Location – {{ form.latitude }},{{ form.longitude }} <br />
+                      Applied Mbps – {{ form.package.name }} ({{ form.package.speed }}
+                      Mbps)<br />
+                      MRC – {{ form.package.price }} <span class="uppercase">{{ form.package.currency }}</span><br />
+                      Preferred installation date & time – {{ form.prefer_install_date }}<br />
+                      <span v-if="form.sale_remark">, {{ form.sale_remark }}</span>
+                      <hr />
+                      Devices - {{ bundle }}<br />
+                      GPON Info - {{ gponInfo }} <br />
+                      DN - {{ dnName }}<br />
+                      SN - {{ snName }}<br />
+                      SN Port - {{ snPort }}<br />
+                    </div>
+
+                  </div>
+                </div>
+
               </div> <!-- Tab Contents -->
             </div>
           </form>
@@ -765,6 +823,13 @@ export default {
     let pop_devices = ref("");
     let pppoe_auto = ref(false);
     let lat_long = '';
+    const bundle = ref(null);
+    const dnInfo = ref(null);
+    const textContent = ref(null);
+    const gponInfo = ref(null);
+    const dnName = ref(null);
+    const snName = ref(null);
+    const snPort = ref(null);
     const snPortNoOptions = ref(
       Array.from({ length: 16 }, (v, i) => ({ id: i + 1, name: `SN Port ${i + 1}` }))
     );
@@ -872,6 +937,7 @@ export default {
       }
     }
     function DNSelect(dn) {
+      dnInfo.value = `Frame${dn.gpon_frame}/Slot${dn.gpon_slot}/Port${dn.gpon_port}`;
       console.log(dn.id);
       getSN(dn.id).then((d) => {
         console.log(d)
@@ -1078,7 +1144,48 @@ export default {
       // If it's neither an object nor an array, return false
       return false;
     }
+    const copyText = () => {
+      if (textContent.value) {
+        // Get the text content from the <code> element
+        let text = textContent.value.innerText;
+        // Use the Clipboard API to copy the text content
+        navigator.clipboard.writeText(text)
+          .then(() => {
+            // Optionally, you can show a success message or feedback to the user
+            alert('Text copied to clipboard!');
+          })
+          .catch(err => {
+            // Handle any errors that occur during the copy
+            console.error('Failed to copy text: ', err);
+          });
+      } else {
+        console.error('Text content ref is undefined.');
+      }
+    };
+    const shareText = () => {
+      if (textContent.value) {
+        // Get the text content from the <code> element
+        let text = textContent.value.innerText;
+        // Use the Clipboard API to copy the text content
+        if (navigator.share) {
+          navigator.share({
+            title: 'Customer Information',
+            text: text
+          }).then(() => {
+            // Optionally, you can show a success message or feedback to the user
+            alert('Text copied to clipboard!');
+          })
+            .catch(err => {
+              // Handle any errors that occur during the copy
+              console.error('Failed to copy text: ', err);
+            });
+        }
 
+
+      } else {
+        console.error('Text content ref is undefined.');
+      }
+    };
     onMounted(() => {
       if (props.sn) {
         props.sn.map(function (x) {
@@ -1096,11 +1203,14 @@ export default {
         let bundle_lists = [];
         bundle_array.forEach(e => {
           bundle_lists.push(props.bundle_equiptments.filter((d) => d.id == e)[0]);
+
+          bundle.value = (!bundle.value) ? props.bundle_equiptments.filter((d) => d.id == e)[0]['name'] : bundle.value + ',' + props.bundle_equiptments.filter((d) => d.id == e)[0]['name'];
         });
         form.bundles = bundle_lists;
       }
       if (props.customer.splitter_no) {
         form.splitter_no = snPortNoOptions.value.filter((d) => d.id == props.customer.splitter_no)[0];
+        snPort.value = form.splitter_no.name;
       }
       if (props.customer.gpon_ontid) {
         form.gpon_ontid = gponOnuIdOptions.value.filter((d) => d.name == props.customer.gpon_ontid)[0];
@@ -1111,8 +1221,12 @@ export default {
       if (props.customer.sn_id) {
         let sn_id = props.sn.filter((d) => d.id == props.customer.sn_id)[0] || null;
         if (sn_id) {
+          snName.value = sn_id.name;
           let dn_id = props.dn.filter((e) => e.id == sn_id.dn_id)[0] || null;
           if (dn_id) {
+            // Frame0/Slot12/Port3/OnuID1
+            dnName.value = dn_id.name;
+            dnInfo.value = `Frame${dn_id.gpon_frame}/Slot${dn_id.gpon_slot}/Port${dn_id.gpon_port}`;
             form.sn_id = sn_id;
             form.dn_id = dn_id;
           }
@@ -1123,9 +1237,26 @@ export default {
       form.wlan_password = (!checkPerm('wlan_password')) ? props.customer.wlan_password : "********";
       form.status = props.status_list.filter((d) => d.id == props.customer.status_id)[0];
       form.subcom = props.subcoms.filter((d) => d.id == props.customer.subcom_id)[0];
+      (props.customer.pop_device_id) ? props.devices.filter((d) => d.id = props.customer.pop_device_id)[0] : "";
+
+      if (props.customer.pop_device_id && dnInfo.value && props.customer.sn_id) {
+        gponInfo.value = `${props.devices.filter((d) => d.id = props.customer.pop_device_id)[0]['device_name']}/${dnInfo.value}`;
+      }
+
+
+      //GPON Info - gponInfo <br />
+      //DN - dnName<br />
+      //SN - snName<br />
+      //SN Port - snPort<br />
     });
 
-    return { form, submit, isNumber, checkPerm, res_sn, DNSelect, tab, tabClick, fillPppoe, pppoe_auto, generatePassword, POPSelect, OLTSelect, res_dn, isEmptyObject, pop_devices, snPortNoOptions, gponOnuIdOptions, };
+    return {
+      form, submit, isNumber, checkPerm, res_sn, DNSelect, tab, tabClick, fillPppoe, pppoe_auto, generatePassword, POPSelect, OLTSelect, res_dn, isEmptyObject, pop_devices, snPortNoOptions, gponOnuIdOptions, dnInfo, bundle, shareText, copyText, textContent,
+      gponInfo,
+      dnName,
+      snName,
+      snPort,
+    };
   },
 };
 </script>
